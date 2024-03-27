@@ -1,3 +1,7 @@
+# Note:
+
+There are too many files in node_module for us to store that in our repo. Please download that seperately and add it to your folder before running `npm start`.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
