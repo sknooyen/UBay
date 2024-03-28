@@ -1,6 +1,6 @@
 # Note:
 
-There are too many files in node_module for us to store that in our repo. Please download that seperately and add it to your folder before running `npm start`.
+There are too many files in node_module for us to store that in our repo. Please download that separately and add it to your folder before running `npm start`. Additionally, remember to install React and [Material UI](https://mui.com/material-ui/getting-started/installation/).
 
 # Getting Started with Create React App
 
