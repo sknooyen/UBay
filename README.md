@@ -1,9 +1,12 @@
 # Note:
 
-There are too many files in node_module for us to store that in our repo. Please download that separately and add it to your folder before running `npm start`. Additionally, remember to install React, [Material UI](https://mui.com/material-ui/getting-started/installation/), and React Router Dom (using the commands below).
-npm install
-npm install @mui/material @emotion/react @emotion/styled
-npm install react-router-dom
+There are too many files in node_module for us to store that in our repo. Please download that separately and add it to your folder before running `npm start`. Additionally, remember to install React, [Material UI](https://mui.com/material-ui/getting-started/installation/), and React Router Dom (using the commands below):
+
+`npm install`
+
+`npm install @mui/material @emotion/react @emotion/styled`
+
+`npm install react-router-dom`
 
 # Getting Started with Create React App
 
