@@ -1,6 +1,8 @@
 import React, { useState, useMemo } from 'react';
-import { AppBar, Toolbar, Typography, Container, Grid, Paper, TextField, Button, ThemeProvider, List, ListItem, Checkbox, ListItemText, Slider, Input, MenuItem, Select } from '@mui/material';
+import { Typography, Container, Grid, Paper, TextField, Button, ThemeProvider, List, ListItem, Checkbox, ListItemText, Slider, Input, MenuItem, Select } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
+import { CATEGORIES, CONDITIONS, SORTING, MAXPRICE } from './util';
+import NavBar from './NavBar';
 
 const theme = createTheme({
   palette: {
@@ -25,21 +27,16 @@ const theme = createTheme({
   },
 });
 
-const categories = ['Books', 'Furniture', 'Electronics', 'Clothing', 'Other'];
-const conditions = ['New', 'Like New', 'Very Good', 'Good', 'Acceptable'];
-const sortingOptions = ['Best Match', 'Price: Low to High', 'Price: High to Low', 'Post Date: New to Old', 'Post Date: Old to New'];
-const maxPrice = 500;
-
 const listings = [
   { id: 1, title: 'CS 121 Textbook', category: 'Books', description: 'So many pages—all so exciting!', condition: 'Like New', price: 15, imageUrl: 'https://via.placeholder.com/150', postDate: '2024-03-28' },
   { id: 2, title: 'Chair', category: 'Furniture', description: 'Good for sitting in. Excellent for dancing on.', condition: 'Very Good', price: 50, imageUrl: 'https://via.placeholder.com/150', postDate: '2024-03-27' },
   { id: 3, title: 'MacBook Pro', category: 'Electronics', description: 'Still in its original box. Decided to give up on my CS degree, so I never ended up using this.', condition: 'New', price: 500, imageUrl: 'https://via.placeholder.com/150', postDate: '2024-03-26' },
 ];
 
-const App = () => {
-  const [checkedCategories, setCheckedCategories] = useState(categories);
-  const [checkedConditions, setCheckedConditions] = useState(conditions);
-  const [priceRange, setPriceRange] = useState([0, maxPrice]);
+const HomePage = () => {
+  const [checkedCategories, setCheckedCategories] = useState(CATEGORIES);
+  const [checkedConditions, setCheckedConditions] = useState(CONDITIONS);
+  const [priceRange, setPriceRange] = useState([0, MAXPRICE]);
   const [sortBy, setSortBy] = useState('Best Match');
 
   const filteredListings = useMemo(() => {
@@ -106,8 +103,8 @@ const App = () => {
   const handlePriceInputBlur = (index) => () => {
     if (priceRange[index] < 0) {
       setPriceRange([0, priceRange[1]]);
-    } else if (priceRange[index] > maxPrice) {
-      setPriceRange([priceRange[0], maxPrice]);
+    } else if (priceRange[index] > MAXPRICE) {
+      setPriceRange([priceRange[0], MAXPRICE]);
     }
   };
 
@@ -124,17 +121,7 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <div>
-        <AppBar position="sticky">
-          <Toolbar>
-            <Typography variant="h6" flexGrow={1}>UBay</Typography>
-            <Button color="inherit">Home</Button>
-            <Button color="inherit">Profile</Button>
-            <Button color="inherit">Watchlist</Button>
-            <Button color="inherit">Sell</Button>
-            <Button color="inherit">Messages</Button>
-          </Toolbar>
-        </AppBar>
-
+        <NavBar />
         <Container>
           <Grid container spacing={2}>
             <Grid item xs={3}>
@@ -145,7 +132,7 @@ const App = () => {
                   onChange={handleSortChange}
                   fullWidth
                 >
-                  {sortingOptions.map((option) => (
+                  {SORTING.map((option) => (
                     <MenuItem key={option} value={option}>
                       {option}
                     </MenuItem>
@@ -156,7 +143,7 @@ const App = () => {
               <Paper>
                 <Typography variant="h6">Categories</Typography>
                 <List>
-                  {categories.map((category) => (
+                  {CATEGORIES.map((category) => (
                     <ListItem key={category} button onClick={handleToggleCategory(category)}>
                       <Checkbox
                         edge="start"
@@ -180,7 +167,7 @@ const App = () => {
                       valueLabelDisplay="auto"
                       aria-labelledby="range-slider"
                       min={0}
-                      max={maxPrice}
+                      max={MAXPRICE}
                     />
                   </Grid>
                   <Grid item>
@@ -192,7 +179,7 @@ const App = () => {
                         type: 'number',
                         'aria-labelledby': 'range-slider',
                         min: 0,
-                        max: maxPrice,
+                        max: MAXPRICE,
                         step: 1,
                       }}
                     />
@@ -207,7 +194,7 @@ const App = () => {
                         type: 'number',
                         'aria-labelledby': 'range-slider',
                         min: 0,
-                        max: maxPrice,
+                        max: MAXPRICE,
                         step: 1,
                       }}
                     />
@@ -218,7 +205,7 @@ const App = () => {
               <Paper>
                 <Typography variant="h6">Conditions</Typography>
                 <List>
-                  {conditions.map((condition) => (
+                  {CONDITIONS.map((condition) => (
                     <ListItem key={condition} button onClick={handleToggleCondition(condition)}>
                       <Checkbox
                         edge="start"
@@ -272,4 +259,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default HomePage;
