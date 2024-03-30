@@ -19,7 +19,7 @@ const theme = createTheme({
         root: {
           padding: '15px',
           gap: '5px',
-          margin: '1px',
+          // margin: '1px',
           boxShadow: '0px 3px 5px rgba(0, 0, 0, 0.2)',
         },
       },

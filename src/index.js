@@ -3,11 +3,24 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import HomePage from './HomePage';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Profile from './Profile';
+import Watchlist from './Watchlist';
+import Sell from './Sell';
+import Messages from './Messages';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <HomePage />
+    <BrowserRouter>
+      <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/watchlist" element={<Watchlist />} />
+            <Route path="/sell" element={<Sell />} />
+            <Route path="/messages" element={<Messages />} />
+      </Routes>
+    </BrowserRouter>
   </React.StrictMode>
 );
 
