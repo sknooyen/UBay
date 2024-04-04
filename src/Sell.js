@@ -75,10 +75,10 @@ const Sell = () => {
   const handlePost = () => {
     if (title && price && description && category && condition && photos.length === 0) {
       // if only the photo is missing, alert
-      setErrorMessage("Posts must contain at least one photo.");
+      setErrorMessage("Listings must contain at least one photo.");
     } else if (!title || !price || !description || !category || !condition || photos.length === 0) {
       // if any component is missing, alert
-      setErrorMessage("All fields are required to create a post.");
+      setErrorMessage("All fields are required to create a listing.");
     } else {
       // TODO: add posting logic
       console.log({ title, price, description, category, condition, photos });
