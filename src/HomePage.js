@@ -1,31 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import { Typography, Container, Grid, Paper, TextField, Button, ThemeProvider, List, ListItem, Checkbox, ListItemText, Slider, Input, MenuItem, Select } from '@mui/material';
-import { createTheme } from '@mui/material/styles';
 import { CATEGORIES, CONDITIONS, SORTING, MAXPRICE } from './util';
 import NavBar from './NavBar';
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#b2102f',
-    },
-    secondary: {
-      main: '#6f252c',
-    },
-  },
-  components: {
-    MuiPaper: {
-      styleOverrides: {
-        root: {
-          padding: '15px',
-          gap: '5px',
-          // margin: '1px',
-          boxShadow: '0px 3px 5px rgba(0, 0, 0, 0.2)',
-        },
-      },
-    },
-  },
-});
+import { pageTheme } from './util';
 
 const listings = [
   { id: 1, title: 'CS 121 Textbook', category: 'Books', description: 'So many pages—all so exciting!', condition: 'Like New', price: 15, imageUrl: 'https://via.placeholder.com/150', postDate: '2024-03-28' },
@@ -119,7 +96,7 @@ const HomePage = () => {
   };
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={pageTheme}>
       <div>
         <NavBar />
         <Container>
