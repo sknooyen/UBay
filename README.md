@@ -8,6 +8,18 @@ There are too many files in node_module for us to store that in our repo. Please
 
 `npm install react-router-dom`
 
+Also for back-end:
+
+`yarn add express mongoose dotenv nodemon`
+
+`npm install jsonwebtoken`
+
+`yarn add crypto-js`
+
+`npm install express cors`
+
+`yarn add axios`
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
