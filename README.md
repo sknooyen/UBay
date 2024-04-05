@@ -20,6 +20,13 @@ Also for back-end:
 
 `yarn add axios`
 
+# To run both back-end and front-end
+
+cd server
+npm start 
+cd ..
+npm start
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
