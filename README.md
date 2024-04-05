@@ -23,8 +23,11 @@ Also for back-end:
 # To run both back-end and front-end
 
 cd server
+
 npm start 
+
 cd ..
+
 npm start
 
 # Getting Started with Create React App
