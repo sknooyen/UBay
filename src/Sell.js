@@ -11,7 +11,7 @@ const Sell = () => {
   const [condition, setCondition] = useState("");
   const [photos, setPhotos] = useState([]);
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
 
   // crop image to square from center
   const cropImageToSquare = (imageSrc, size) => {
@@ -68,17 +68,17 @@ const Sell = () => {
     );
   };
 
-  const handleCloseErrorMessage = () => {
-    setErrorMessage("");
+  const handleCloseAlertMessage = () => {
+    setAlertMessage("");
   };
 
   const handlePost = () => {
     if (title && price && description && category && condition && photos.length === 0) {
       // if only the photo is missing, alert
-      setErrorMessage("Listings must contain at least one photo.");
+      setAlertMessage("⚠️ Listings must contain at least one photo.");
     } else if (!title || !price || !description || !category || !condition || photos.length === 0) {
       // if any component is missing, alert
-      setErrorMessage("All fields are required to create a listing.");
+      setAlertMessage("⚠️ All fields are required to create a listing.");
     } else {
       // TODO: add posting logic
       console.log({ title, price, description, category, condition, photos });
@@ -91,6 +91,9 @@ const Sell = () => {
       setCondition("");
       setPhotos([]);
       setCurrentPhotoIndex(0);
+
+      // notify user that their listing was posted
+      setAlertMessage("✅ Listing posted succesfully.");
     }
   };
 
@@ -257,10 +260,10 @@ const Sell = () => {
           </Grid>
           <Snackbar
             anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-            open={!!errorMessage}
+            open={!!alertMessage}
             autoHideDuration={6000}
-            onClose={handleCloseErrorMessage}
-            message={errorMessage}
+            onClose={handleCloseAlertMessage}
+            message={alertMessage}
           />
         </Container>
       </div>
