@@ -22,13 +22,13 @@ Also for back-end:
 
 # To run both back-end and front-end
 
-cd server
+`cd server`
 
-npm start 
+`npm start `
 
-cd ..
+Open a new terminal
 
-npm start
+`npm start`
 
 # Getting Started with Create React App
 
