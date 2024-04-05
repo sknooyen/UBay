@@ -1,6 +1,8 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { AppBar, Toolbar, Typography, Container, Grid, Paper, TextField, Button, ThemeProvider, List, ListItem, Checkbox, ListItemText, Slider, Input, MenuItem, Select } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
+import axios from 'axios';
+import "./App.css"
 
 const theme = createTheme({
   palette: {
@@ -25,30 +27,46 @@ const theme = createTheme({
   },
 });
 
-const categories = ['Books', 'Furniture', 'Electronics', 'Clothing', 'Other'];
-const conditions = ['New', 'Like New', 'Very Good', 'Good', 'Acceptable'];
+const categories = ['Men', 'Women', 'Electronics', 'Clothing', 'Other'];
+const conditions = ['New', 'Like New', 'Very Good', 'Good', 'Acceptable', 'Old', 'Normal'];
 const sortingOptions = ['Best Match', 'Price: Low to High', 'Price: High to Low', 'Post Date: New to Old', 'Post Date: Old to New'];
 const maxPrice = 500;
 
-const listings = [
-  { id: 1, title: 'CS 121 Textbook', category: 'Books', description: 'So many pages—all so exciting!', condition: 'Like New', price: 15, imageUrl: 'https://via.placeholder.com/150', postDate: '2024-03-28' },
-  { id: 2, title: 'Chair', category: 'Furniture', description: 'Good for sitting in. Excellent for dancing on.', condition: 'Very Good', price: 50, imageUrl: 'https://via.placeholder.com/150', postDate: '2024-03-27' },
-  { id: 3, title: 'MacBook Pro', category: 'Electronics', description: 'Still in its original box. Decided to give up on my CS degree, so I never ended up using this.', condition: 'New', price: 500, imageUrl: 'https://via.placeholder.com/150', postDate: '2024-03-26' },
-];
+// const listings = [
+//   { id: 1, title: 'CS 121 Textbook', category: 'Books', description: 'So many pages—all so exciting!', condition: 'Like New', price: 15, imageUrl: 'https://via.placeholder.com/150', postDate: '2024-03-28' },
+//   { id: 2, title: 'Chair', category: 'Furniture', description: 'Good for sitting in. Excellent for dancing on.', condition: 'Very Good', price: 50, imageUrl: 'https://via.placeholder.com/150', postDate: '2024-03-27' },
+//   { id: 3, title: 'MacBook Pro', category: 'Electronics', description: 'Still in its original box. Decided to give up on my CS degree, so I never ended up using this.', condition: 'New', price: 500, imageUrl: 'https://via.placeholder.com/150', postDate: '2024-03-26' },
+// ];
 
 const App = () => {
   const [checkedCategories, setCheckedCategories] = useState(categories);
   const [checkedConditions, setCheckedConditions] = useState(conditions);
   const [priceRange, setPriceRange] = useState([0, maxPrice]);
   const [sortBy, setSortBy] = useState('Best Match');
+  const [listings, setListings] = useState([]);
+
+  useEffect(() => {
+    axios.get('http://localhost:8000/api/products')
+      .then(response => {
+        console.log('Response:', response.data); // Log the response data
+        setListings(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching products:', error);
+      });
+  }, []);
+
+  // console.log('listings now:', listings);
 
   const filteredListings = useMemo(() => {
     let filteredListings = listings.filter(listing => 
-      checkedCategories.includes(listing.category) &&
+      listing.category.some(category => checkedCategories.includes(category)) &&
       checkedConditions.includes(listing.condition) &&
       listing.price >= priceRange[0] && 
       listing.price <= priceRange[1]
     );
+
+    console.log('Filtered listings:', filteredListings);
 
     // sort listings
     switch (sortBy) {
@@ -71,7 +89,10 @@ const App = () => {
     }
 
     return filteredListings;
-  }, [checkedCategories, checkedConditions, priceRange, sortBy]);
+  }, [listings, checkedCategories, checkedConditions, priceRange, sortBy]);
+
+  console.log("Start testing NOW2")
+  console.log(filteredListings)
 
   const handleToggleCategory = (category) => () => {
     setCheckedCategories(prev => {
@@ -244,23 +265,27 @@ const App = () => {
                   </Grid>
                   <Grid item xs={12}>
                     <Typography variant="h4">Listings</Typography>
-                    {filteredListings.map((listing) => (
-                      <div
-                        key={listing.id}
-                        onClick={() => handleListingClick(listing)}
-                        style={{ cursor: 'pointer' }}
-                      >
-                        <Paper style={{ display: 'flex', alignItems: 'center', padding: '10px', marginBottom: '10px' }}>
-                          <img src={listing.imageUrl} alt={listing.title} style={{ marginRight: '10px' }} />
-                          <div>
-                            <Typography variant="h6" style={{ fontWeight: 'bold' }}>{listing.title}</Typography>
-                            <Typography variant="subtitle1" style={{ marginBottom: '5px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '300px' }}>{listing.description}</Typography>
-                            <Typography variant="subtitle2">Condition: {listing.condition}</Typography>
-                            <Typography variant="subtitle2">Price: ${listing.price}</Typography>
-                          </div>
-                        </Paper>
-                      </div>
-                    ))}
+                    {filteredListings.length > 0 ? (
+                      filteredListings.map((listing) => (
+                        <div
+                          key={listing.id}
+                          onClick={() => handleListingClick(listing)}
+                          style={{ cursor: 'pointer' }}
+                        >
+                          <Paper style={{ display: 'flex', alignItems: 'center', padding: '10px', marginBottom: '10px' }}>
+                            <img src={"https://via.placeholder.com/150"} alt={listing.title} style={{ marginRight: '10px' }} />
+                            <div>
+                              <Typography variant="h6" style={{ fontWeight: 'bold' }}>{listing.title}</Typography>
+                              <Typography variant="subtitle1" style={{ marginBottom: '5px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '300px' }}>{listing.description}</Typography>
+                              <Typography variant="subtitle2">Condition: {listing.condition}</Typography>
+                              <Typography variant="subtitle2">Price: ${listing.price}</Typography>
+                            </div>
+                          </Paper>
+                        </div>
+                      ))
+                    ) : (
+                      <Typography variant="subtitle1">No listings found.</Typography>
+                    )}
                   </Grid>
                 </Grid>
               </Paper>
@@ -273,3 +298,36 @@ const App = () => {
 };
 
 export default App;
+
+// Testing the connection backend frontend
+
+// import React, { useState, useEffect } from 'react';
+
+// function ProductDisplay() {
+//     const [products, setProducts] = useState([]);
+
+//     useEffect(() => {
+//         fetch('http://localhost:8000/api/products')
+//             .then(response => response.json())
+//             .then(data => setProducts(data))
+//             .catch(error => console.error('Error fetching data:', error));
+//     }, []);
+
+//     return (
+//         <div>
+//             {products.map(product => (
+//                 <div key={product._id}>
+//                     <h2>{product.title}</h2>
+//                     <p>Description: {product.desc}</p>
+//                     <p>Price: ${product.price}</p>
+//                     <p>Size: {product.size}</p>
+//                     <p>Color: {product.color}</p>
+//                     <p>Categories: {product.categories.join(', ')}</p>
+//                     <img src={product.img} alt={product.title} />
+//                 </div>
+//             ))}
+//         </div>
+//     );
+// }
+
+// export default ProductDisplay;
