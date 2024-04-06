@@ -86,3 +86,7 @@ Using Python 3.12
    * Recommended to do this in a virtual environment (can use [venv](https://www.freecodecamp.org/news/how-to-setup-virtual-environments-in-python/) or [anaconda](https://towardsdatascience.com/getting-started-with-python-environments-using-conda-32e9f2779307))
 2. Following the .env_template file set up a file called .env. You should fill out the USER and PASSWORD variables
 3. You can run the mongoDB.py file to see a simple example of some of the things we can do.
+
+Install FirebaseUI and its dependencies via npm using the following command:
+
+$ npm install firebaseui --save
