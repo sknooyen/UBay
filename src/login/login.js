@@ -1,15 +1,17 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
-function Login(){
+function SignOut(){
+    const navigate = useNavigate()
     const logout =()=>{
         localStorage.clear()
-        window.location.reload()
+        navigate("/")
     }
     return (
         <div>
-            <h1>Home Page</h1>
+            <h1>Sign Out Page</h1>
             <button onClick={logout}>Logout</button>
         </div>
     );
 }
-export default Login;
+export default SignOut;

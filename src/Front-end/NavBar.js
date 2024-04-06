@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material';
 import { pageTheme } from './util';
 
+
 const NavBar = () => {
     const navigate = useNavigate();
     return (
@@ -15,6 +16,7 @@ const NavBar = () => {
                 <Button color="inherit" onClick={() => navigate('/watchlist')}>Watchlist</Button>
                 <Button color="inherit" onClick={() => navigate('/sell')}>Sell</Button>
                 <Button color="inherit" onClick={() => navigate('/messages')}>Messages</Button>
+                <Button color="inherit" onClick={() => navigate('/signout')}>Signout</Button>
                 </Toolbar>
             </AppBar>
         </ThemeProvider>
