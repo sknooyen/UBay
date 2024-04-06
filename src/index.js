@@ -8,17 +8,19 @@ import Profile from './Front-end/Profile';
 import Watchlist from './Front-end/Watchlist';
 import Sell from './Front-end/Sell';
 import Messages from './Front-end/Messages';
+import SignIn from './login/sign';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-            <Route path="/" element={<HomePage />} />
+            <Route path="/home" element={<HomePage />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/watchlist" element={<Watchlist />} />
             <Route path="/sell" element={<Sell />} />
             <Route path="/messages" element={<Messages />} />
+            <Route path="/" element={<SignIn />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
