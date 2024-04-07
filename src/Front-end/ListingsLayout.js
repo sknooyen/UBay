@@ -207,7 +207,7 @@ const ListingsLayout = (props) => {
                         style={{ cursor: 'pointer' }}
                       >
                         <Paper style={{ display: 'flex', alignItems: 'center', padding: '10px', marginBottom: '10px' }}>
-                          <img src={listing.imageUrl} alt={listing.title} style={{ marginRight: '10px' }} />
+                          <img src={listing.imageURL[0]} alt={listing.title} style={{ marginRight: '10px', maxWidth: '100px', borderRadius: '10px'}} />
                           <div>
                             <Typography variant="h6" style={{ fontWeight: 'bold' }}>{listing.title}</Typography>
                             <Typography variant="subtitle1" style={{ marginBottom: '5px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '300px' }}>{listing.description}</Typography>
