@@ -2,12 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import HomePage from './HomePage';
+import HomePage from './Front-end/HomePage';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Profile from './Profile';
-import Watchlist from './Watchlist';
-import Sell from './Sell';
-import Messages from './Messages';
+import Profile from './Front-end/Profile';
+import Watchlist from './Front-end/Watchlist';
+import Sell from './Front-end/Sell';
+import Messages from './Front-end/Messages';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
