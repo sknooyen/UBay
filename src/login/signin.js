@@ -2,6 +2,10 @@ import React, { useEffect, useState } from "react";
 import { auth,provider } from "./loginconfig";
 import { signInWithPopup } from "firebase/auth"
 import { useNavigate } from 'react-router-dom';
+import './login.css'
+import { pageTheme } from "../Front-end/util";
+import { ThemeProvider, Paper, AppBar } from '@mui/material';
+
 
 function SignIn(){
     const [value,setValue] = useState('')
@@ -14,6 +18,9 @@ function SignIn(){
                 setAuth(data.user.emailVerified)
                 localStorage.setItem("email",data.user.email)
             }
+            else {
+                alert("Must have @umass.edu")
+            }
         })
     }
 
@@ -22,11 +29,17 @@ function SignIn(){
     })
 
 return (
-    <div>
-        {value?navigate('/home'):
+    <ThemeProvider theme={pageTheme}>
+    <AppBar position="sticky">
+    <h1>UBay</h1>
+    </AppBar>
+    <div class="login-container">
+    {value?navigate('/home'):
         <button onClick={handleClick}>Sign In With Google</button>
         }
+    <h4> UMass Email Only </h4>
     </div>
+    </ThemeProvider>
 );
 }
 export default SignIn;

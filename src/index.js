@@ -8,8 +8,9 @@ import Profile from './Front-end/Profile';
 import Watchlist from './Front-end/Watchlist';
 import Sell from './Front-end/Sell';
 import Messages from './Front-end/Messages';
-import SignIn from './login/sign';
-import SignOut from './login/login';
+import SignIn from './login/signin';
+import SignOut from './login/signout';
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

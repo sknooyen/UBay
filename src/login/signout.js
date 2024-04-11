@@ -8,8 +8,8 @@ function SignOut(){
         navigate("/")
     }
     return (
-        <div>
-            <h1>Sign Out Page</h1>
+        <div class="login-container">
+            <h1>Sign Out Page Probably move to profile xD!</h1>
             <button onClick={logout}>Logout</button>
         </div>
     );
