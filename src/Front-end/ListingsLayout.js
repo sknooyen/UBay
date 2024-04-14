@@ -1,46 +1,42 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Typography, Container, Grid, Paper, TextField, Button, ThemeProvider, List, ListItem, Checkbox, ListItemText, Slider, Input, MenuItem, Select } from '@mui/material';
-import { CATEGORIES, CONDITIONS, SORTING, MAXPRICE } from './util';
-import NavBar from './NavBar';
-import { pageTheme } from './util';
+import axios from 'axios';
+import {CATEGORIES, CONDITIONS, SORTING, MAXPRICE, pageTheme, SortList} from './util'
+import NavBar from './NavBar'
 
 const ListingsLayout = (props) => {
-  const {title, listings} = props
+  const {title, HomePage} = props
 
   const [checkedCategories, setCheckedCategories] = useState(CATEGORIES);
   const [checkedConditions, setCheckedConditions] = useState(CONDITIONS);
   const [priceRange, setPriceRange] = useState([0, MAXPRICE]);
   const [sortBy, setSortBy] = useState('Best Match');
+  const [listings, setListings] = useState([]);
+  const [filteredListings, setFilteredListings] = useState([])
 
-  const filteredListings = useMemo(() => {
-    let filteredListings = listings.filter(listing => 
-      checkedCategories.includes(listing.category) &&
+  useEffect(() => {
+    if(HomePage){
+      axios.get('http://localhost:8000/api/products')
+      .then(response => {
+        console.log('Response:', response.data); // Log the response data
+        setListings(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching products:', error);
+      });
+    }
+  }, [HomePage]);
+
+  useMemo(() => {
+    console.log('printing')
+    console.log(listings)
+    setFilteredListings(SortList(listings.filter(listing => 
+      listing.category.some(category => checkedCategories.includes(category)) &&
       checkedConditions.includes(listing.condition) &&
       listing.price >= priceRange[0] && 
       listing.price <= priceRange[1]
-    );
-
-    // sort listings
-    switch (sortBy) {
-      case 'Price: Low to High':
-        filteredListings.sort((a, b) => a.price - b.price);
-        break;
-      case 'Price: High to Low':
-        filteredListings.sort((a, b) => b.price - a.price);
-        break;
-      case 'Post Date: New to Old':
-        filteredListings.sort((a, b) => new Date(b.postDate) - new Date(a.postDate));
-        break;
-      case 'Post Date: Old to New':
-        filteredListings.sort((a, b) => new Date(a.postDate) - new Date(b.postDate));
-        break;
-      default:
-        // TODO: implement best match (right now it just displays everything in the arrays original order)
-
-        break;
-    }
-
-    return filteredListings;
+    )
+    ), sortBy);
   }, [checkedCategories, checkedConditions, priceRange, sortBy, listings]);
 
   const handleToggleCategory = (category) => () => {
@@ -211,7 +207,7 @@ const ListingsLayout = (props) => {
                         style={{ cursor: 'pointer' }}
                       >
                         <Paper style={{ display: 'flex', alignItems: 'center', padding: '10px', marginBottom: '10px' }}>
-                          <img src={listing.imageUrl} alt={listing.title} style={{ marginRight: '10px' }} />
+                          <img src={listing.imageURL[0]} alt={listing.title} style={{ marginRight: '10px', maxWidth: '100px', borderRadius: '10px'}} />
                           <div>
                             <Typography variant="h6" style={{ fontWeight: 'bold' }}>{listing.title}</Typography>
                             <Typography variant="subtitle1" style={{ marginBottom: '5px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '300px' }}>{listing.description}</Typography>
