@@ -17,7 +17,7 @@ mongoose.connect(process.env.MONGO_URL)
 .then(() => console.log("DBConnection Success"))
 .catch((err) => console.log(err))
 
-app.use(express.json())
+app.use(express.json({ limit: '500kb' }))
 app.use("/api/auth", authRoute)
 app.use("/api/users", userRoute)
 app.use("/api/products", productRoute)
