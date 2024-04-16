@@ -11,6 +11,7 @@ router.post("/", async (req, res) => {
         const savedProduct = await newProduct.save();
         res.status(200).json(savedProduct);
     } catch(err) {
+        console.log(err)
         res.status(500).json(err)
     }
 })
