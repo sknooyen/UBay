@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { Typography, Container, Grid, Paper, TextField, Button, ThemeProvider, List, ListItem, Checkbox, ListItemText, Slider, Input, MenuItem, Select } from '@mui/material';
 import {CATEGORIES, CONDITIONS, SORTING, MAXPRICE, pageTheme, SortList} from './util'
 import NavBar from './NavBar'
+import ListingItem from './ListingItem';
 
 const ListingsLayout = (props) => {
   const {title, listings} = props
@@ -184,21 +185,7 @@ const ListingsLayout = (props) => {
                   <Grid item xs={12}>
                     <Typography variant="h4">{title}</Typography>
                     {filteredListings.map((listing) => (
-                      <div
-                        key={listing.id}
-                        onClick={() => handleListingClick(listing)}
-                        style={{ cursor: 'pointer' }}
-                      >
-                        <Paper style={{ display: 'flex', alignItems: 'center', padding: '10px', marginBottom: '10px' }}>
-                        <img src={listing.imageURL[0]} alt={listing.title} style={{ marginRight: '10px', maxWidth: '100px', borderRadius: '10px'}} />
-                          <div>
-                            <Typography variant="h6" style={{ fontWeight: 'bold' }}>{listing.title}</Typography>
-                            <Typography variant="subtitle1" style={{ marginBottom: '5px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '300px' }}>{listing.description}</Typography>
-                            <Typography variant="subtitle2">Condition: {listing.condition}</Typography>
-                            <Typography variant="subtitle2">Price: ${listing.price}</Typography>
-                          </div>
-                        </Paper>
-                      </div>
+                      <ListingItem key={listing.id} listing={listing} handleListingClick={handleListingClick} />
                     ))}
                   </Grid>
                 </Grid>
