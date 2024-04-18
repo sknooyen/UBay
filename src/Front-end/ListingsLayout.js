@@ -1,10 +1,12 @@
 import React, { useState, useMemo } from 'react';
 import { Typography, Container, Grid, Paper, TextField, Button, ThemeProvider, List, ListItem, Checkbox, ListItemText, Slider, Input, MenuItem, Select } from '@mui/material';
-import {CATEGORIES, CONDITIONS, SORTING, MAXPRICE, pageTheme, SortList} from './util'
+import {CATEGORIES, CONDITIONS, SORTING, MAXPRICE, pageTheme, SortList} from './util';
+import { useNavigate } from 'react-router-dom';
 import NavBar from './NavBar'
 import ListingItem from './ListingItem';
 
 const ListingsLayout = (props) => {
+  const navigate = useNavigate();
   const {title, listings} = props
 
   const [checkedCategories, setCheckedCategories] = useState(CATEGORIES);
@@ -66,9 +68,8 @@ const ListingsLayout = (props) => {
   };
 
   const handleListingClick = (listing) => {
-    console.log('Listing clicked:', listing);
-
-    // TODO: add logic when listing is clicked
+    const extension = '/listing/' + listing.id;
+    navigate(extension);
   };
 
   return (
