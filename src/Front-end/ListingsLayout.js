@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Typography, Container, Grid, Paper, TextField, Button, ThemeProvider, List, ListItem, Checkbox, ListItemText, Slider, Input, MenuItem, Select } from '@mui/material';
+import { Typography, Container, Grid, Paper, TextField, ThemeProvider, List, ListItem, Checkbox, ListItemText, Slider, Input, MenuItem, Select } from '@mui/material';
 import {CATEGORIES, CONDITIONS, SORTING, MAXPRICE, pageTheme, SortList} from './util';
 import { useNavigate } from 'react-router-dom';
 import NavBar from './NavBar'
@@ -13,17 +13,20 @@ const ListingsLayout = (props) => {
   const [checkedConditions, setCheckedConditions] = useState(CONDITIONS);
   const [priceRange, setPriceRange] = useState([0, MAXPRICE]);
   const [sortBy, setSortBy] = useState('Best Match');
+  const [search, setSearch] = useState('');
   const [filteredListings, setFilteredListings] = useState([])
 
   useMemo(() => {
+    console.log(search)
     setFilteredListings(SortList(listings.filter(listing => 
       listing.category.some(category => checkedCategories.includes(category)) &&
       checkedConditions.includes(listing.condition) &&
       listing.price >= priceRange[0] && 
-      listing.price <= priceRange[1]
+      listing.price <= priceRange[1] &&
+      listing.title.toLowerCase().includes(search.toLowerCase())
     )
     ), sortBy);
-  }, [checkedCategories, checkedConditions, priceRange, sortBy, listings]);
+  }, [checkedCategories, checkedConditions, priceRange, sortBy, listings, search]);
 
   const handleToggleCategory = (category) => () => {
     setCheckedCategories(prev => {
@@ -179,8 +182,7 @@ const ListingsLayout = (props) => {
                 <Grid container spacing={2}>
                   <Grid item xs={12}>
                     <Paper style={{ display: 'flex', alignItems: 'center' }}>
-                      <TextField label="Search" variant="standard" style={{ flex: 1 }} />
-                      <Button variant="contained" color="primary">Go</Button>
+                      <TextField label="Search" variant="standard" style={{ flex: 1 }} onChange={(event) => setSearch(event.target.value)}/>
                     </Paper>
                   </Grid>
                   <Grid item xs={12}>
