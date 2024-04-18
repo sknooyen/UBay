@@ -3,7 +3,7 @@ import NavBar from "./NavBar";
 export const Conversation = () =>{
     return(
         <div className="conversation">
-            <span className="conversationName">Skeeyee</span>
+            <span className="conversationName">Sample_User</span>
         </div>
     )
 
@@ -12,7 +12,7 @@ export const Message = ({own}) => {
     return (
     <div className={own ? "message own": "message" }>
         <div className="messageTop">
-            <p className="messageText">Skeeeeeyyeeeeeeee</p>
+            <p className="messageText">This is a message</p>
         </div>
     <div className="messageBottom">Sent moments ago</div>
     </div>

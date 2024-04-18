@@ -2,6 +2,7 @@ import NavBar from "./NavBar";
 import React, { useState } from "react";
 import { TextField, Button, Snackbar, Paper, Container, MenuItem, Grid, ThemeProvider, Typography } from "@mui/material";
 import { CATEGORIES, CONDITIONS, pageTheme } from "./util";
+import axios from 'axios';
 
 const Sell = () => {
   const [title, setTitle] = useState("");
@@ -12,6 +13,9 @@ const Sell = () => {
   const [photos, setPhotos] = useState([]);
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   const [alertMessage, setAlertMessage] = useState("");
+
+  // max file size for uploads
+  const maxSize = "500 kB";
 
   // crop image to square from center
   const cropImageToSquare = (imageSrc, size) => {
@@ -82,18 +86,39 @@ const Sell = () => {
     } else {
       // TODO: add posting logic
       console.log({ title, price, description, category, condition, photos });
-    
-      // clear the form fields
-      setTitle("");
-      setPrice("");
-      setDescription("");
-      setCategory("");
-      setCondition("");
-      setPhotos([]);
-      setCurrentPhotoIndex(0);
+      // Upload to back-end
+      const data = {
+        title,
+        category: [category], // Ensure category is sent as an array as per backend schema
+        description,
+        condition,
+        price: parseFloat(price), // Parse price as a number
+        imageURL: photos,
+      }
 
-      // notify user that their listing was posted
-      setAlertMessage("✅ Listing posted succesfully.");
+      // This needs to be async, upload then clean
+      axios.post('http://localhost:8000/api/products', data).then(res => {
+        // clear the form fields
+        setTitle("");
+        setPrice("");
+        setDescription("");
+        setCategory("");
+        setCondition("");
+        setPhotos([]);
+        setCurrentPhotoIndex(0);
+
+        // notify user that their listing was posted
+        setAlertMessage("✅ Listing posted succesfully.");
+      }).catch(error => {
+        console.error('Error posting data:', error);
+
+        // alert user of post failure -- if payload is too large, explain that
+        if (error.response.status == 413) {
+          setAlertMessage("⚠️ Error posting listing. Please upload images less than " + maxSize + " in total.");
+        } else {
+          setAlertMessage("⚠️ Error posting listing. Please try again.");
+        }
+      });
     }
   };
 

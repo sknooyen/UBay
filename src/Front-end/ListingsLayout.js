@@ -1,47 +1,32 @@
 import React, { useState, useMemo } from 'react';
-import { Typography, Container, Grid, Paper, TextField, Button, ThemeProvider, List, ListItem, Checkbox, ListItemText, Slider, Input, MenuItem, Select } from '@mui/material';
-import { CATEGORIES, CONDITIONS, SORTING, MAXPRICE } from './util';
-import NavBar from './NavBar';
-import { pageTheme } from './util';
+import { Typography, Container, Grid, Paper, TextField, ThemeProvider, List, ListItem, Checkbox, ListItemText, Slider, Input, MenuItem, Select } from '@mui/material';
+import {CATEGORIES, CONDITIONS, SORTING, MAXPRICE, pageTheme, SortList} from './util';
+import { useNavigate } from 'react-router-dom';
+import NavBar from './NavBar'
+import ListingItem from './ListingItem';
 
 const ListingsLayout = (props) => {
+  const navigate = useNavigate();
   const {title, listings} = props
 
   const [checkedCategories, setCheckedCategories] = useState(CATEGORIES);
   const [checkedConditions, setCheckedConditions] = useState(CONDITIONS);
   const [priceRange, setPriceRange] = useState([0, MAXPRICE]);
   const [sortBy, setSortBy] = useState('Best Match');
+  const [search, setSearch] = useState('');
+  const [filteredListings, setFilteredListings] = useState([])
 
-  const filteredListings = useMemo(() => {
-    let filteredListings = listings.filter(listing => 
-      checkedCategories.includes(listing.category) &&
+  useMemo(() => {
+    console.log(search)
+    setFilteredListings(SortList(listings.filter(listing => 
+      listing.category.some(category => checkedCategories.includes(category)) &&
       checkedConditions.includes(listing.condition) &&
       listing.price >= priceRange[0] && 
-      listing.price <= priceRange[1]
-    );
-
-    // sort listings
-    switch (sortBy) {
-      case 'Price: Low to High':
-        filteredListings.sort((a, b) => a.price - b.price);
-        break;
-      case 'Price: High to Low':
-        filteredListings.sort((a, b) => b.price - a.price);
-        break;
-      case 'Post Date: New to Old':
-        filteredListings.sort((a, b) => new Date(b.postDate) - new Date(a.postDate));
-        break;
-      case 'Post Date: Old to New':
-        filteredListings.sort((a, b) => new Date(a.postDate) - new Date(b.postDate));
-        break;
-      default:
-        // TODO: implement best match (right now it just displays everything in the arrays original order)
-
-        break;
-    }
-
-    return filteredListings;
-  }, [checkedCategories, checkedConditions, priceRange, sortBy, listings]);
+      listing.price <= priceRange[1] &&
+      listing.title.toLowerCase().includes(search.toLowerCase())
+    )
+    ), sortBy);
+  }, [checkedCategories, checkedConditions, priceRange, sortBy, listings, search]);
 
   const handleToggleCategory = (category) => () => {
     setCheckedCategories(prev => {
@@ -86,9 +71,8 @@ const ListingsLayout = (props) => {
   };
 
   const handleListingClick = (listing) => {
-    console.log('Listing clicked:', listing);
-
-    // TODO: add logic when listing is clicked
+    const extension = '/listing/' + listing.id;
+    navigate(extension);
   };
 
   return (
@@ -198,28 +182,13 @@ const ListingsLayout = (props) => {
                 <Grid container spacing={2}>
                   <Grid item xs={12}>
                     <Paper style={{ display: 'flex', alignItems: 'center' }}>
-                      <TextField label="Search" variant="standard" style={{ flex: 1 }} />
-                      <Button variant="contained" color="primary">Go</Button>
+                      <TextField label="Search" variant="standard" style={{ flex: 1 }} onChange={(event) => setSearch(event.target.value)}/>
                     </Paper>
                   </Grid>
                   <Grid item xs={12}>
                     <Typography variant="h4">{title}</Typography>
                     {filteredListings.map((listing) => (
-                      <div
-                        key={listing.id}
-                        onClick={() => handleListingClick(listing)}
-                        style={{ cursor: 'pointer' }}
-                      >
-                        <Paper style={{ display: 'flex', alignItems: 'center', padding: '10px', marginBottom: '10px' }}>
-                          <img src={listing.imageUrl} alt={listing.title} style={{ marginRight: '10px' }} />
-                          <div>
-                            <Typography variant="h6" style={{ fontWeight: 'bold' }}>{listing.title}</Typography>
-                            <Typography variant="subtitle1" style={{ marginBottom: '5px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '300px' }}>{listing.description}</Typography>
-                            <Typography variant="subtitle2">Condition: {listing.condition}</Typography>
-                            <Typography variant="subtitle2">Price: ${listing.price}</Typography>
-                          </div>
-                        </Paper>
-                      </div>
+                      <ListingItem key={listing.id} listing={listing} handleListingClick={handleListingClick} />
                     ))}
                   </Grid>
                 </Grid>
