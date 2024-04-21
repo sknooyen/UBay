@@ -4,7 +4,7 @@ There are too many files in node_module for us to store that in our repo. Please
 
 `npm install`
 
-`npm install @mui/material @emotion/react @emotion/styled`
+`npm install @mui/material @mui/icons-material @emotion/react @emotion/styled`
 
 `npm install react-router-dom`
 

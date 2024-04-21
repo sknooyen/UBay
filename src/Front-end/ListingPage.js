@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Button, Paper, Container, Grid, ThemeProvider, Typography } from "@mui/material";
+import { Button, Paper, IconButton, Container, Grid, ThemeProvider, Typography } from "@mui/material";
 import { pageTheme } from "./util";
+import { Favorite } from "@mui/icons-material";
 import axios from "axios";
 import NavBar from "./NavBar";
 import { useParams, useNavigate } from "react-router-dom";
@@ -10,6 +11,7 @@ const ListingPage = () => {
   const { id } = useParams();
   const [listings, setListing] = useState([]);
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
+  const [isFavorite, setIsFavorite] = useState(false);
 
   // TODO: replace with actual user logic
   const name = "Sabrina";
@@ -47,6 +49,11 @@ const ListingPage = () => {
     );
   };
 
+  const handleFavorite = () => {
+    setIsFavorite(!isFavorite);
+    // TODO: add logic here
+  };
+
   return (
     <ThemeProvider theme={pageTheme}>
       <NavBar />
@@ -54,8 +61,15 @@ const ListingPage = () => {
         <Container>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <Paper>
+              <Paper style={{ position: "relative" }}>
                 <Typography variant="h4" gutterBottom>{listing.title} – ${listing.price}</Typography>
+                <IconButton
+                  onClick={handleFavorite}
+                  color={isFavorite ? "primary" : "default"}
+                  style={{ position: "absolute", top: 0, right: 0, margin: "10px" }}
+                >
+                  <Favorite />
+                </IconButton>
                 <Typography variant="h8" fontStyle='oblique' gutterBottom>Posted by {name} on {date}</Typography>
                 <Grid container spacing={2}>
                   <Grid item xs={6}>
