@@ -20,6 +20,8 @@ Also for back-end:
 
 `yarn add axios`
 
+`npm install firebase`
+
 # To run both back-end and front-end
 
 `cd server`
