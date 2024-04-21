@@ -4,8 +4,10 @@ import { pageTheme } from "./util";
 import axios from "axios";
 import NavBar from "./NavBar";
 import { useParams, useNavigate } from "react-router-dom";
+import { useAuth } from "../login/loginconfig";
 
 const ListingPage = () => {
+  const currentUser = useAuth()
   const navigate = useNavigate();
   const { id } = useParams();
   const [listings, setListing] = useState([]);
@@ -48,6 +50,7 @@ const ListingPage = () => {
   };
 
   return (
+    currentUser &&
     <ThemeProvider theme={pageTheme}>
       <NavBar />
       <div>

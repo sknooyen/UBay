@@ -1,5 +1,6 @@
 import "./Messages.css"
 import NavBar from "./NavBar";
+import { useAuth } from "../login/loginconfig";
 export const Conversation = () =>{
     return(
         <div className="conversation">
@@ -19,7 +20,8 @@ export const Message = ({own}) => {
     )
 }
 const Messages = () => {
-    return (
+    const currentUser = useAuth()
+    return (currentUser &&
         <>
             <NavBar />
             <h1>Messages</h1>

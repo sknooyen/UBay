@@ -3,8 +3,10 @@ import React, { useState } from "react";
 import { TextField, Button, Snackbar, Paper, Container, MenuItem, Grid, ThemeProvider, Typography } from "@mui/material";
 import { CATEGORIES, CONDITIONS, pageTheme } from "./util";
 import axios from 'axios';
+import { useAuth } from "../login/loginconfig";
 
 const Sell = () => {
+  const currentUser = useAuth()
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
@@ -122,7 +124,7 @@ const Sell = () => {
     }
   };
 
-  return (
+  return (currentUser &&
     <ThemeProvider theme={pageTheme}>
       <NavBar />
       <div>

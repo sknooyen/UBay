@@ -3,8 +3,10 @@ import { Typography, Grid, Container, Paper, ThemeProvider, Button, Dialog, Dial
 import { pageTheme } from "./util";
 import ListingItem from './ListingItem';
 import NavBar from "./NavBar";
+import { useAuth } from '../login/loginconfig';
 
 const Profile = () => {
+    const currentUser = useAuth()
     // TODO: add actual name logic
     const name = "Professor Rattigan";
 
@@ -40,7 +42,7 @@ const Profile = () => {
     };
 
     return (
-        <ThemeProvider theme={pageTheme}>
+        currentUser && <ThemeProvider theme={pageTheme}>
             <NavBar />
             <div>
                 <Container>

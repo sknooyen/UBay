@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 
 // Import the functions you need from the SDKs you need
 import { initializeApp} from "firebase/app";
-import {getAuth, GoogleAuthProvider} from "firebase/auth"
+import {getAuth, GoogleAuthProvider, onAuthStateChanged, signOut} from "firebase/auth"
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -23,5 +24,18 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider()
 
+export function useAuth() {
+  const [currentUser, setCurrentUser] = useState();
+
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, user => setCurrentUser(user));
+    return unsub;
+  }, [])
+  return currentUser;
+}
+
+export function logOut() {
+  return signOut(auth)
+}
 
 export {auth, provider};

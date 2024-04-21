@@ -1,10 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import ListingsLayout from './ListingsLayout';
 import axios from 'axios';
+import { useAuth } from '../login/loginconfig';
 
 const HomePage = () => {
 
   const [listings, setListings] = useState([]);
+  const currentUser = useAuth()
 
   useEffect(() => {
     axios.get('http://localhost:8000/api/products')
@@ -18,7 +20,7 @@ const HomePage = () => {
   }, []);
 
   return (
-    <ListingsLayout title="Listings" listings={listings}/>
+    currentUser && <ListingsLayout title="Listings" listings={listings}/>
   );
 };
 
