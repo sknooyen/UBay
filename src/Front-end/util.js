@@ -26,25 +26,3 @@ export const pageTheme = createTheme({
       },
     },
 });
-
-export const SortList = (arr, sort) => {
-  switch (sort) {
-    case 'Price: Low to High':
-      arr.sort((a, b) => a.price - b.price);
-      break;
-    case 'Price: High to Low':
-      arr.sort((a, b) => b.price - a.price);
-      break;
-    case 'Post Date: New to Old':
-      arr.sort((a, b) => new Date(b.postDate) - new Date(a.postDate));
-      break;
-    case 'Post Date: Old to New':
-      arr.sort((a, b) => new Date(a.postDate) - new Date(b.postDate));
-      break;
-    default:
-      // TODO: implement best match (right now it just displays everything in the arrays original order)
-
-      break;
-  }
-  return arr
-}
