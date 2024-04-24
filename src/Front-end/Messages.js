@@ -1,5 +1,8 @@
 import "./Messages.css"
 import NavBar from "./NavBar";
+
+import { pageTheme } from "./util";
+
 export const Conversation = () =>{
     return(
         <div className="conversation">
@@ -22,7 +25,7 @@ const Messages = () => {
     return (
         <>
             <NavBar />
-            <h1>Messages</h1>
+            <h1>Direct Messages</h1>
             <div className="messenger">
                 <div className="chatMenu">
                     <div className="chatMenuWrapper">

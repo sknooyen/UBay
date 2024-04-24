@@ -14,6 +14,9 @@ const Sell = () => {
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   const [alertMessage, setAlertMessage] = useState("");
 
+  // max file size for uploads
+  const maxSize = "500 kB";
+
   // crop image to square from center
   const cropImageToSquare = (imageSrc, size) => {
     return new Promise((resolve) => {
@@ -108,7 +111,13 @@ const Sell = () => {
         setAlertMessage("✅ Listing posted succesfully.");
       }).catch(error => {
         console.error('Error posting data:', error);
-        setAlertMessage("❌ Error posting listing. Please try again.");
+
+        // alert user of post failure -- if payload is too large, explain that
+        if (error.response.status == 413) {
+          setAlertMessage("⚠️ Error posting listing. Please upload images less than " + maxSize + " in total.");
+        } else {
+          setAlertMessage("⚠️ Error posting listing. Please try again.");
+        }
       });
     }
   };
