@@ -20,9 +20,11 @@ router.newChat("/", async (req, res)=> {
         console.error(err);
         res.status(500).send("Error starting new chat")
     }
+})
 
     //adds a new message object to the list
-    router.newMessage("/", async (req, res)=> {
+   
+   router.newMessage("/", async (req, res)=> {
         try{
             let message_object = {
                 sender: req.body.sender,
@@ -43,6 +45,3 @@ router.newChat("/", async (req, res)=> {
         }
         
     })
-
-
-})
