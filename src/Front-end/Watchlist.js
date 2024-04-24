@@ -12,12 +12,24 @@ const Watchlist = () => {
     const [products, setProducts] = useState([]);
     const userEmail = auth.currentUser ? auth.currentUser.email : '';
 
+    // useEffect(() => {
+    //     // Fetch products associated with userEmail
+    //     fetch(`http://localhost:8000/api/favorite?id_email=${userEmail}`)
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             setProducts(data);
+    //         })
+    //         .catch(error => console.error('Error fetching products:', error));
+    // }, [userEmail]);
+
     useEffect(() => {
-        // Fetch products associated with userEmail
-        fetch(`http://localhost:8000/api/favorite?id_email=${userEmail}`)
+        // Fetch all products from the backend
+        fetch(`http://localhost:8000/api/products`)
             .then(response => response.json())
             .then(data => {
-                setProducts(data);
+                // Filter products to only include those where userEmail is in favorite_id array
+                const filteredProducts = data.filter(product => product.favorite_id.includes(userEmail));
+                setProducts(filteredProducts);
             })
             .catch(error => console.error('Error fetching products:', error));
     }, [userEmail]);

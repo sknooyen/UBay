@@ -97,7 +97,8 @@ const Sell = () => {
         condition,
         price: parseFloat(price), // Parse price as a number
         imageURL: photos,
-        id_email: userEmail
+        id_email: userEmail,
+        favorite_id: []
       }
 
       // This needs to be async, upload then clean

@@ -52,9 +52,11 @@ const ListingPage = () => {
 
   const handleFavorite = () => {
     setIsFavorite(!isFavorite);
+    console.log("Entered Favorite logic")
     // setIsFavorite(true);
     // TODO: add logic here
     const userEmail = auth.currentUser ? auth.currentUser.email : '';
+    const updatedFavoriteId = [...listing.favorite_id, userEmail];
 
     const favoriteData = {
       id: listing.id,
@@ -64,12 +66,13 @@ const ListingPage = () => {
       condition: listing.condition,
       price: listing.price,// Parse price as a number
       imageURL: listing.imageURL,
-      id_email: userEmail
+      id_email: userEmail,
+      favorite_id: updatedFavoriteId
     }
 
-    axios.post('http://localhost:8000/api/favorite', favoriteData)
+    axios.put(`http://localhost:8000/api/products/${listing._id}`, favoriteData)
       .then(response => {
-        console.log("Listing added to favorites successfully:", response.data);
+        console.log("Listing added to favorites successfully (updated):", response.data);
         setIsFavorite(isFavorite);
       })
       .catch(error => {
