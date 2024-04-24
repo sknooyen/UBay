@@ -16,8 +16,8 @@ router.post("/", async (req, res) => {
     }
 })
 
-// //UPDATE
-router.put("/:id", verifyTokenAndAdmin, async (req, res) => {
+// UPDATE
+router.put("/:id", async (req, res) => {
   try {
     const updatedProduct = await Product.findByIdAndUpdate(
       req.params.id,
@@ -32,8 +32,8 @@ router.put("/:id", verifyTokenAndAdmin, async (req, res) => {
   }
 });
 
-// //DELETE
-router.delete("/:id", verifyTokenAndAdmin, async (req, res) =>  {
+// DELETE
+router.delete("/:id", async (req, res) =>  {
     try {
         await Product.findByIdAndDelete(req.params.id)
         res.status(200).json("Product has been deleted...")
@@ -53,15 +53,36 @@ router.get("/find/:id", async (req, res) =>  {
 })
 
 //GET ALL
+// router.get("/", async (req, res) =>  {
+//     const qNew = req.query.new;
+//     const qCategory = req.query.category;
+//     try {
+//         let products;
+//         if (qNew){
+//             products = await Product.find().sort({createdAt: -1}).limit(1);
+//         } else if (qCategory) {
+//             products = await Product.find({category: qCategory});
+//         } else {
+//             products = await Product.find();
+//         }
+//         res.status(200).json(products);
+//     } catch(err) {
+//         res.status(500).json(err);
+//     }
+// })
+
 router.get("/", async (req, res) =>  {
     const qNew = req.query.new;
     const qCategory = req.query.category;
+    const qIdEmail = req.query.id_email; // Add this line to extract id_email query parameter
     try {
         let products;
-        if (qNew){
-            products = await Product.find().sort({createdAt: -1}).limit(1);
+        if (qIdEmail) {
+            products = await Product.find({ id_email: qIdEmail }); // Filter products by id_email if the query parameter is provided
+        } else if (qNew) {
+            products = await Product.find().sort({ createdAt: -1 }).limit(1);
         } else if (qCategory) {
-            products = await Product.find({category: qCategory});
+            products = await Product.find({ category: qCategory });
         } else {
             products = await Product.find();
         }

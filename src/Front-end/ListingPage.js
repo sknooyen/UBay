@@ -5,6 +5,7 @@ import { Favorite } from "@mui/icons-material";
 import axios from "axios";
 import NavBar from "./NavBar";
 import { useParams, useNavigate } from "react-router-dom";
+import { auth } from "../login/loginconfig";
 
 const ListingPage = () => {
   const navigate = useNavigate();
@@ -51,7 +52,29 @@ const ListingPage = () => {
 
   const handleFavorite = () => {
     setIsFavorite(!isFavorite);
+    // setIsFavorite(true);
     // TODO: add logic here
+    const userEmail = auth.currentUser ? auth.currentUser.email : '';
+
+    const favoriteData = {
+      id: listing.id,
+      title: listing.title,
+      category: listing.category, // Ensure category is sent as an array as per backend schema
+      description: listing.description,
+      condition: listing.condition,
+      price: listing.price,// Parse price as a number
+      imageURL: listing.imageURL,
+      id_email: userEmail
+    }
+
+    axios.post('http://localhost:8000/api/favorite', favoriteData)
+      .then(response => {
+        console.log("Listing added to favorites successfully:", response.data);
+        setIsFavorite(isFavorite);
+      })
+      .catch(error => {
+        console.error("Error adding listing to favorites:", error);
+      });
   };
 
   return (

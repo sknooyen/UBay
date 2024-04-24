@@ -1,7 +1,7 @@
 const mongoose = require("mongoose")
 const { v4: uuidv4 } = require('uuid');
 
-const ProductSchema = new mongoose.Schema(
+const FavoriteSchema = new mongoose.Schema(
     {
         id: {type: String, default: uuidv4, unique: true},
         title: {type: String, required: true, unique: true},
@@ -18,4 +18,4 @@ const ProductSchema = new mongoose.Schema(
     {timestamps: true}
 );
 
-module.exports = mongoose.model("Product", ProductSchema)
+module.exports = mongoose.model("Favorite", FavoriteSchema)
