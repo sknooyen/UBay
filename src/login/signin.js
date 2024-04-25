@@ -28,6 +28,7 @@ function SignIn(){
     }
 
 return (
+    <>
     <ThemeProvider theme={pageTheme}>
     <AppBar position="sticky">
     <h1>UBay</h1>
@@ -39,6 +40,7 @@ return (
     <h4> UMass Email Only </h4>
     </div>
     </ThemeProvider>
+    </>
 );
 }
 export default SignIn;
