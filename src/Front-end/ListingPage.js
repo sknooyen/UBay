@@ -9,6 +9,7 @@ import { auth } from "../login/loginconfig";
 
 const ListingPage = () => {
   const navigate = useNavigate();
+  const userEmail = auth.currentUser ? auth.currentUser.email : '';
   const { id } = useParams();
   const [listings, setListing] = useState([]);
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
@@ -30,6 +31,13 @@ const ListingPage = () => {
   }, [id]);
 
   const listing = listings.find((listing) => listing.id == id);
+    
+  // set heart color when listing loads
+  useEffect(() => {
+    if (listing) {
+      setIsFavorite(listing.favorite_id.includes(userEmail));
+    }
+  }, [listings, userEmail]);
 
   // display loading screen while fetching listing
   if (!listing) {
@@ -51,12 +59,16 @@ const ListingPage = () => {
   };
 
   const handleFavorite = () => {
-    setIsFavorite(!isFavorite);
-    console.log("Entered Favorite logic")
-    // setIsFavorite(true);
-    // TODO: add logic here
-    const userEmail = auth.currentUser ? auth.currentUser.email : '';
-    const updatedFavoriteId = [...listing.favorite_id, userEmail];
+    var updatedFavoriteId = ""
+
+    setIsFavorite(listing.favorite_id.includes(userEmail))
+
+    // update depending on whether or not this product is already favorited
+    if (isFavorite) {
+      updatedFavoriteId = [...listing.favorite_id].filter(email => email !== userEmail);
+    } else {
+      updatedFavoriteId = [...listing.favorite_id, userEmail];
+    }
 
     const favoriteData = {
       id: listing.id,
@@ -72,8 +84,9 @@ const ListingPage = () => {
 
     axios.put(`http://localhost:8000/api/products/${listing._id}`, favoriteData)
       .then(response => {
-        console.log("Listing added to favorites successfully (updated):", response.data);
-        setIsFavorite(isFavorite);
+        console.log("Favorites updated on listing:", response.data);
+        listing.favorite_id = updatedFavoriteId
+        setIsFavorite(!isFavorite)
       })
       .catch(error => {
         console.error("Error adding listing to favorites:", error);
