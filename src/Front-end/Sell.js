@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { TextField, Button, Snackbar, Paper, Container, MenuItem, Grid, ThemeProvider, Typography } from "@mui/material";
 import { CATEGORIES, CONDITIONS, pageTheme } from "./util";
 import axios from 'axios';
+import { auth } from "../login/loginconfig";
 
 const Sell = () => {
   const [title, setTitle] = useState("");
@@ -86,6 +87,8 @@ const Sell = () => {
     } else {
       // TODO: add posting logic
       console.log({ title, price, description, category, condition, photos });
+      // Get the email here
+      const userEmail = auth.currentUser ? auth.currentUser.email : '';
       // Upload to back-end
       const data = {
         title,
@@ -94,6 +97,8 @@ const Sell = () => {
         condition,
         price: parseFloat(price), // Parse price as a number
         imageURL: photos,
+        id_email: userEmail,
+        favorite_id: []
       }
 
       // This needs to be async, upload then clean
