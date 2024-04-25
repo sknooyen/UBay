@@ -15,10 +15,6 @@ const ListingPage = () => {
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   const [isFavorite, setIsFavorite] = useState(false);
 
-  // TODO: replace with actual user logic
-  const name = "Sabrina";
-  const date = "01/01/2025";
-
   useEffect(() => {
     axios
       .get(`http://localhost:8000/api/products/`)
@@ -109,7 +105,7 @@ const ListingPage = () => {
                 >
                   <Favorite />
                 </IconButton>
-                <Typography variant="h8" fontStyle='oblique' gutterBottom>Posted by {name} on {date}</Typography>
+                <Typography variant="h8" fontStyle='oblique' gutterBottom>Posted by {listing.id_email.substring(0, listing.id_email.indexOf('@'))} on {listing.updatedAt.substring(0, 10)}</Typography>
                 <Grid container spacing={2}>
                   <Grid item xs={6}>
                     <div
