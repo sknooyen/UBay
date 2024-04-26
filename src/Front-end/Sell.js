@@ -174,6 +174,7 @@ const Sell = () => {
       setCategory("");
       setCondition("");
       setPhotos([]);
+      setEditMode(false);
     }
   }, [id]);
 
@@ -184,7 +185,9 @@ const Sell = () => {
     if (listing && !(listing.id_email == userEmail)) {
       navigate('/');
     } else {
-      setEditMode(true)
+      if (listing) {
+        setEditMode(true)
+      }
     }
   }, [listing, userEmail]);
 
