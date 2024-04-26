@@ -4,9 +4,11 @@ import { pageTheme } from "./util";
 import ListingItem from './ListingItem';
 import NavBar from "./NavBar";
 import { auth } from "../login/loginconfig";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
-    // TODO: add actual name logic
+    const navigate = useNavigate();
+    
     const [products, setProducts] = useState([]);
     const [deleteListing, setDeleteListing] = useState(null);
 
@@ -31,7 +33,8 @@ const Profile = () => {
 
     const handleEdit = (listing) => {
         console.log('Edit clicked (profile):', listing);
-        // TODO: add logic when listing is clicked
+        const extension = '/sell/' + listing.id;
+        navigate(extension);
     };
 
     const handleDelete = (listing) => {
