@@ -25,6 +25,7 @@ root.render(
             <Route path="/" element={<SignIn />} />
             <Route path="/signout" element={<SignOut/>} />
             <Route path="/listing/:id" element={<ListingPage />} /> 
+            <Route path="/sell/:id" element={<Sell />} /> 
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
