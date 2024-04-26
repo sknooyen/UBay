@@ -4,9 +4,11 @@ import {CATEGORIES, CONDITIONS, SORTING, MAXPRICE, pageTheme} from './util';
 import { useNavigate } from 'react-router-dom';
 import NavBar from './NavBar'
 import ListingItem from './ListingItem';
+import { auth } from "../login/loginconfig";
 
 const ListingsLayout = (props) => {
   const navigate = useNavigate();
+  const userEmail = auth.currentUser ? auth.currentUser.email : '';
   const {title, listings} = props
 
   const [checkedCategories, setCheckedCategories] = useState(CATEGORIES);
@@ -89,7 +91,14 @@ const ListingsLayout = (props) => {
   };
 
   const handleListingClick = (listing) => {
-    const extension = '/listing/' + listing.id;
+    var extension = '/'
+
+    if (listing.id_email == userEmail) {
+      extension = '/sell/' + listing.id;
+    } else {
+      extension = '/listing/' + listing.id;
+    }
+
     navigate(extension);
   };
 
