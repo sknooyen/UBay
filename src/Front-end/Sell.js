@@ -1,10 +1,18 @@
 import NavBar from "./NavBar";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { TextField, Button, Snackbar, Paper, Container, MenuItem, Grid, ThemeProvider, Typography } from "@mui/material";
 import { CATEGORIES, CONDITIONS, pageTheme } from "./util";
 import axios from 'axios';
+import { auth } from "../login/loginconfig";
 
 const Sell = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  
+  const userEmail = auth.currentUser ? auth.currentUser.email : '';
+  const [listings, setListing] = useState([]);
+  const [editMode, setEditMode] = useState(false);
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
@@ -84,8 +92,9 @@ const Sell = () => {
       // if any component is missing, alert
       setAlertMessage("⚠️ All fields are required to create a listing.");
     } else {
-      // TODO: add posting logic
       console.log({ title, price, description, category, condition, photos });
+      // Get the email here
+      const userEmail = auth.currentUser ? auth.currentUser.email : '';
       // Upload to back-end
       const data = {
         title,
@@ -94,6 +103,8 @@ const Sell = () => {
         condition,
         price: parseFloat(price), // Parse price as a number
         imageURL: photos,
+        id_email: userEmail,
+        favorite_id: []
       }
 
       // This needs to be async, upload then clean
@@ -121,6 +132,64 @@ const Sell = () => {
       });
     }
   };
+
+  const handleCancel = () => {
+    navigate('/')
+  };
+
+  const handleDelete = () => {
+    // TODO: implement delete
+  };
+
+  const handleUpdate = () => {
+    // TODO: implement update
+  };
+
+  // if id is in url, load all listings
+  useEffect(() => {
+    if(id) {
+      axios
+        .get(`http://localhost:8000/api/products/`)
+        .then((response) => {
+          setListing(response.data);
+          const listing = response.data.find((listing) => listing.id === id);
+
+          // update fields to contain listing information
+          if (listing) {
+            setTitle(listing.title);
+            setPrice(listing.price);
+            setDescription(listing.description);
+            setCategory(listing.category);
+            setCondition(listing.condition);
+            setPhotos(listing.imageURL);
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching listing details:", error);
+        });
+    } else {
+      setTitle("");
+      setPrice("");
+      setDescription("");
+      setCategory("");
+      setCondition("");
+      setPhotos([]);
+      setEditMode(false);
+    }
+  }, [id]);
+
+  const listing = listings.find((listing) => listing.id == id);
+
+  // if not authorized owner of this listing, go back to home page, otherwise, set to edit mode
+  useEffect(() => {
+    if (listing && !(listing.id_email == userEmail)) {
+      navigate('/');
+    } else {
+      if (listing) {
+        setEditMode(true)
+      }
+    }
+  }, [listing, userEmail]);
 
   return (
     <ThemeProvider theme={pageTheme}>
@@ -270,14 +339,45 @@ const Sell = () => {
                     </MenuItem>
                   ))}
                 </TextField>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handlePost}
-                  fullWidth
-                >
-                  Post
-                </Button>
+                {editMode ? ( // render cancel, delete, and update buttons if editMode is true
+                    <>
+                      <div style={{ display: "flex", justifyContent: "space-between" }}>
+                        <Button
+                        variant="contained"
+                        color="grey"
+                        onClick={handleCancel}
+                        style={{ width: "30%" }}
+                        >
+                        Cancel
+                        </Button>
+                        <Button
+                        variant="contained"
+                        color="grey"
+                        onClick={handleDelete}
+                        style={{ width: "30%" }}
+                        >
+                        Delete
+                        </Button>
+                        <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={handleUpdate}
+                        style={{ width: "30%" }}
+                        >
+                        Update
+                        </Button>
+                    </div>
+                    </>
+                  ) : ( // otherwise, render Post button
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={handlePost}
+                      fullWidth
+                    >
+                      Post
+                    </Button>
+                  )}                  
               </Grid>
             </Grid>
             </Paper>

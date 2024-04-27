@@ -1,17 +1,30 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Typography, Grid, Container, Paper, ThemeProvider, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import { pageTheme } from "./util";
 import ListingItem from './ListingItem';
 import NavBar from "./NavBar";
+import { auth } from "../login/loginconfig";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
-    // TODO: add actual name logic
-    const name = "Professor Rattigan";
+    const navigate = useNavigate();
+    
+    const [products, setProducts] = useState([]);
+    const [deleteListing, setDeleteListing] = useState(null);
 
-    const temp_listings = [
-        { id: 1, title: 'Fav CS 121 Textbook', category: ['Books'], description: 'So many pages—all so exciting!', condition: 'Like New', price: 15, imageURL: ['https://www.mrporter.com/variants/images/38063312418276845/in/w2000_q60.jpg'], postDate: '2024-03-28' },
-        { id: 2, title: 'Fav Chair', category: ['Furniture'], description: 'Good for sitting in. Excellent for dancing on.', condition: 'Very Good', price: 50, imageURL: ['https://www.mrporter.com/variants/images/38063312418276845/in/w2000_q60.jpg'], postDate: '2024-03-27' },
-    ];
+    // Mocked user email for testing
+    // const userEmail = 'bnnguyen@umass.edu';
+    const userEmail = auth.currentUser ? auth.currentUser.email : '';
+
+    useEffect(() => {
+        // Fetch products associated with userEmail
+        fetch(`http://localhost:8000/api/products?id_email=${userEmail}`)
+            .then(response => response.json())
+            .then(data => {
+                setProducts(data);
+            })
+            .catch(error => console.error('Error fetching products:', error));
+    }, [userEmail]);
 
     const handleListingClick = (listing) => {
         console.log('Listing clicked (profile):', listing);
@@ -20,10 +33,9 @@ const Profile = () => {
 
     const handleEdit = (listing) => {
         console.log('Edit clicked (profile):', listing);
-        // TODO: add logic when listing is clicked
+        const extension = '/sell/' + listing.id;
+        navigate(extension);
     };
-
-    const [deleteListing, setDeleteListing] = useState(null);
 
     const handleDelete = (listing) => {
         setDeleteListing(listing);
@@ -32,7 +44,25 @@ const Profile = () => {
     const handleConfirmDelete = () => {
         console.log('Deletion confirmed (profile):', deleteListing);
         // TODO: add logic to delete the listing
-        setDeleteListing(null); // Close the dialog
+        // setDeleteListing(null); // Close the dialog
+        fetch(`http://localhost:8000/api/products/${deleteListing._id}`, {
+            method: 'DELETE',
+        })
+        .then(response => {
+            if (response.ok) {
+                // Remove the deleted listing from the state
+                setProducts(prevProducts => prevProducts.filter(product => product.id !== deleteListing.id));
+            } else {
+                throw new Error('Failed to delete listing');
+            }
+        })
+        .catch(error => {
+            console.error('Error deleting listing:', error);
+            // Handle error
+        })
+        .finally(() => {
+            setDeleteListing(null); // Close the dialog
+        });
     };
 
     const handleCloseDeleteDialog = () => {
@@ -47,8 +77,8 @@ const Profile = () => {
                     <Paper style={{ display: "flex", padding: '10px', margin: '10px' }}>
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
-                                <Typography variant="h4">{name + "'s Listings"}</Typography>
-                                {temp_listings.map((listing) => (
+                                <Typography variant="h4">{"My Listings"}</Typography>
+                                {products.map((listing) => (
                                     <Grid container key={listing.id} alignItems="center" spacing={2}>
                                         <Grid item xs={10}>
                                             <ListingItem listing={listing} handleListingClick={handleListingClick} />

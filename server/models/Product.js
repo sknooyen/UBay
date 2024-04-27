@@ -12,7 +12,9 @@ const ProductSchema = new mongoose.Schema(
         imageURL: {type: Array, required: true},
         size: {type: String},
         color: {type: String},
-        postDate: {type: String}
+        postDate: {type: String},
+        id_email: {type: String, default: "unknown@umass.edu", required: true},
+        favorite_id: {type: Array}
     },
     {timestamps: true}
 );

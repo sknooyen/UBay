@@ -5,17 +5,15 @@ import { Favorite } from "@mui/icons-material";
 import axios from "axios";
 import NavBar from "./NavBar";
 import { useParams, useNavigate } from "react-router-dom";
+import { auth } from "../login/loginconfig";
 
 const ListingPage = () => {
   const navigate = useNavigate();
+  const userEmail = auth.currentUser ? auth.currentUser.email : '';
   const { id } = useParams();
   const [listings, setListing] = useState([]);
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   const [isFavorite, setIsFavorite] = useState(false);
-
-  // TODO: replace with actual user logic
-  const name = "Sabrina";
-  const date = "01/01/2025";
 
   useEffect(() => {
     axios
@@ -29,6 +27,13 @@ const ListingPage = () => {
   }, [id]);
 
   const listing = listings.find((listing) => listing.id == id);
+    
+  // set heart color when listing loads
+  useEffect(() => {
+    if (listing) {
+      setIsFavorite(listing.favorite_id.includes(userEmail));
+    }
+  }, [listings, userEmail]);
 
   // display loading screen while fetching listing
   if (!listing) {
@@ -50,8 +55,38 @@ const ListingPage = () => {
   };
 
   const handleFavorite = () => {
-    setIsFavorite(!isFavorite);
-    // TODO: add logic here
+    var updatedFavoriteId = ""
+
+    setIsFavorite(listing.favorite_id.includes(userEmail))
+
+    // update depending on whether or not this product is already favorited
+    if (isFavorite) {
+      updatedFavoriteId = [...listing.favorite_id].filter(email => email !== userEmail);
+    } else {
+      updatedFavoriteId = [...listing.favorite_id, userEmail];
+    }
+
+    const favoriteData = {
+      id: listing.id,
+      title: listing.title,
+      category: listing.category, // Ensure category is sent as an array as per backend schema
+      description: listing.description,
+      condition: listing.condition,
+      price: listing.price,// Parse price as a number
+      imageURL: listing.imageURL,
+      id_email: userEmail,
+      favorite_id: updatedFavoriteId
+    }
+
+    axios.put(`http://localhost:8000/api/products/${listing._id}`, favoriteData)
+      .then(response => {
+        console.log("Favorites updated on listing:", response.data);
+        listing.favorite_id = updatedFavoriteId
+        setIsFavorite(!isFavorite)
+      })
+      .catch(error => {
+        console.error("Error adding listing to favorites:", error);
+      });
   };
 
   return (
@@ -70,7 +105,7 @@ const ListingPage = () => {
                 >
                   <Favorite />
                 </IconButton>
-                <Typography variant="h8" fontStyle='oblique' gutterBottom>Posted by {name} on {date}</Typography>
+                <Typography variant="h8" fontStyle='oblique' gutterBottom>Posted by {listing.id_email.substring(0, listing.id_email.indexOf('@'))} on {listing.updatedAt.substring(0, 10)}</Typography>
                 <Grid container spacing={2}>
                   <Grid item xs={6}>
                     <div
