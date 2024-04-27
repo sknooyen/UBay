@@ -89,11 +89,11 @@ router.get("/", async (req, res) =>  {
         } else if (qFavOf) {
             products = await Product.find({ favorite_id: qFavOf });
         } else if (qID) {
-            products = await Product.find({ id: qID });
+            products = await Product.findOne({ id: qID });
         } else {
             products = await Product.find();
         }
-        // console.log(products)
+        console.log(products)
         res.status(200).json(products);
     } catch(err) {
         res.status(500).json(err);

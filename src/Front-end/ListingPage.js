@@ -30,6 +30,7 @@ const ListingPage = () => {
 
   // console.log("Listing: ", listing);
 
+  // set heart color when listing loads
   useEffect(() => {
     if (listing) {
       setIsFavorite(listing.favorite_id.includes(userEmail));
