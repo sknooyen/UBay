@@ -22,18 +22,18 @@ const Watchlist = () => {
     //         .catch(error => console.error('Error fetching products:', error));
     // }, [userEmail]);
 
+    // console.log("email :", userEmail)
+
+    //Get all products favorited the user
     useEffect(() => {
-        // Fetch all products from the backend
-        fetch(`http://localhost:8000/api/products`)
+        fetch(`http://localhost:8000/api/products?fav_of=${userEmail}`)
             .then(response => response.json())
             .then(data => {
-                // Filter products to only include those where userEmail is in favorite_id array
-                const filteredProducts = data.filter(product => product.favorite_id.includes(userEmail));
-                setProducts(filteredProducts);
+                setProducts(data);
             })
             .catch(error => console.error('Error fetching products:', error));
     }, [userEmail]);
-
+    console.log("products: ", products)
     return (
         <ListingsLayout title="Watchlist" listings={products}/>
       );
