@@ -139,10 +139,51 @@ const Sell = () => {
 
   const handleDelete = () => {
     // TODO: implement delete
+    if (listing && listing._id) {
+      axios.delete(`http://localhost:8000/api/products/${listing._id}`)
+        .then(() => {
+          // Clear form fields
+          setTitle("");
+          setPrice("");
+          setDescription("");
+          setCategory("");
+          setCondition("");
+          setPhotos([]);
+          setCurrentPhotoIndex(0);
+          setAlertMessage("✅ Listing deleted successfully.");
+          navigate('/');
+        })
+        .catch((error) => {
+          console.error("Error deleting listing:", error);
+          setAlertMessage("⚠️ Error deleting listing. Please try again.");
+        });
+    }
   };
 
   const handleUpdate = () => {
     // TODO: implement update
+    if (listing && listing._id) {
+      const data = {
+        title,
+        category: category,
+        description,
+        condition,
+        price: parseFloat(price),
+        imageURL: photos,
+        id_email: userEmail,
+        favorite_id: []
+      };
+  
+      axios.put(`http://localhost:8000/api/products/${listing._id}`, data)
+        .then(() => {
+          setAlertMessage("✅ Listing updated successfully.");
+          navigate('/')
+        })
+        .catch((error) => {
+          console.error("Error updating listing:", error);
+          setAlertMessage("⚠️ Error updating listing. Please try again.");
+        });
+    }
   };
 
   // if id is in url, load all listings
