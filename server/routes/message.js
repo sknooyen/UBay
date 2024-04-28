@@ -7,7 +7,7 @@ const router = require("express").Router();
 let collection = db.collection("Chat Logs")
 
 //Starts a chat between two users
-router.newChat("/", async (req, res)=> {
+router.post("/", async (req, res)=> {
    try{
         let newChat = {
             user1 : req.body.user1,
@@ -24,7 +24,7 @@ router.newChat("/", async (req, res)=> {
 
     //adds a new message object to the list
    
-   router.newMessage("/", async (req, res)=> {
+   router.post("/", async (req, res)=> {
         try{
             let message_object = {
                 sender: req.body.sender,
@@ -44,4 +44,13 @@ router.newChat("/", async (req, res)=> {
             console.error("error occured: ", err)
         }
         
+    })
+
+    router.get("/", async(req,res)=>{
+        try{
+            let chat = collection.find({user1: req.user1, user2: req.user2})
+            res.status(200).json(chat)
+        }catch(error){
+            res.status(500).json(err)
+        }
     })
