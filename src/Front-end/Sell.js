@@ -104,7 +104,8 @@ const Sell = () => {
         price: parseFloat(price), // Parse price as a number
         imageURL: photos,
         id_email: userEmail,
-        favorite_id: []
+        favorite_id: [],
+        report_id: []
       }
 
       // This needs to be async, upload then clean
@@ -171,7 +172,8 @@ const Sell = () => {
         price: parseFloat(price),
         imageURL: photos,
         id_email: userEmail,
-        favorite_id: []
+        favorite_id: [],
+        report_count: []
       };
   
       axios.put(`http://localhost:8000/api/products/${listing._id}`, data)

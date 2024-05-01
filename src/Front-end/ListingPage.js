@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Button, Paper, IconButton, Container, Grid, ThemeProvider, Typography } from "@mui/material";
 import { pageTheme } from "./util";
 import { Favorite } from "@mui/icons-material";
+import { Report } from "@mui/icons-material";
 import axios from "axios";
 import NavBar from "./NavBar";
 import { useParams, useNavigate } from "react-router-dom";
@@ -14,6 +15,7 @@ const ListingPage = () => {
   const [listing, setListing] = useState();
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [isReport, setIsReport] = useState(false);
   // console.log("listing page")
 
   //Get the product with the id
@@ -34,6 +36,7 @@ const ListingPage = () => {
   useEffect(() => {
     if (listing) {
       setIsFavorite(listing.favorite_id.includes(userEmail));
+      setIsReport(listing.report_count.includes(userEmail));
     }
   }, [listing, userEmail]);
 
@@ -56,6 +59,52 @@ const ListingPage = () => {
     );
   };
 
+  const handleReport = () => {
+    var updatedReport = [...listing.report_count];
+    setIsReport(listing.report_count.includes(userEmail))
+
+    // update depending on whether or not this product is already reported
+    if (isReport) {
+      updatedReport = [...listing.report_count].filter(email => email !== userEmail);
+    } else {
+      updatedReport = [...listing.report_count, userEmail];
+    }
+
+    const reportData = {
+      id: listing.id,
+      title: listing.title,
+      category: listing.category, // Ensure category is sent as an array as per backend schema
+      description: listing.description,
+      condition: listing.condition,
+      price: listing.price,// Parse price as a number
+      imageURL: listing.imageURL,
+      id_email: listing.id_email,
+      favorite_id: listing.favorite_id,
+      report_count: updatedReport
+    }
+
+    axios.put(`http://localhost:8000/api/products/${listing._id}`, reportData)
+      .then(response => {
+        console.log("Reports updated on listing:", response.data);
+        listing.report_count = updatedReport;
+        setIsReport(!isReport)
+
+        if (updatedReport.length >= 10) {
+          axios.delete(`http://localhost:8000/api/products/${listing._id}`)
+            .then(response => {
+              console.log("Listing deleted:", response.data);
+              // Perform any additional actions needed after deletion
+            })
+            .catch(error => {
+              console.error("Error deleting listing:", error);
+            });
+        }
+      })
+      .catch(error => {
+        console.error("Error adding listing to Report:", error);
+      });
+  }
+
   const handleFavorite = () => {
     var updatedFavoriteId = ""
 
@@ -77,6 +126,7 @@ const ListingPage = () => {
       price: listing.price,// Parse price as a number
       imageURL: listing.imageURL,
       id_email: listing.id_email,
+      report_count: listing.report_count,
       favorite_id: updatedFavoriteId
     }
 
@@ -107,6 +157,14 @@ const ListingPage = () => {
                 >
                   <Favorite />
                 </IconButton>
+                <IconButton
+                  onClick={handleReport}
+                  color={isReport ? "primary" : "default"}
+                  style={{ position: "absolute", top: 0, right: 40, margin: "10px" }}
+                >
+                  <Report />
+                </IconButton>
+                <Typography variant="body2" style={{ position: "absolute", top: 40, right: 66 }}>{listing.report_count.length}</Typography>
                 <Typography variant="h8" fontStyle='oblique' gutterBottom>Posted by {listing.id_email.substring(0, listing.id_email.indexOf('@'))} on {listing.updatedAt.substring(0, 10)}</Typography>
                 <Grid container spacing={2}>
                   <Grid item xs={6}>
