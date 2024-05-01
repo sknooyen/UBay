@@ -17,7 +17,7 @@
     "firebase": "^10.11.0",
     "firebaseui": "^6.1.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.3.0",
+    "mongoose": "^8.3.3",
     "nodemon": "^3.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
