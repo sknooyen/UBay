@@ -9,8 +9,9 @@ import { auth } from "../login/loginconfig";
 const ListingsLayout = (props) => {
   const navigate = useNavigate();
   const userEmail = auth.currentUser ? auth.currentUser.email : '';
-  const {title, listings} = props
-
+  const title = props.title;
+  let listings = props.listings;
+  console.log(listings);
   const [checkedCategories, setCheckedCategories] = useState(CATEGORIES);
   const [checkedConditions, setCheckedConditions] = useState(CONDITIONS);
   const [priceRange, setPriceRange] = useState([0, MAXPRICE]);

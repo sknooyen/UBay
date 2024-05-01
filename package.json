@@ -18,12 +18,12 @@
     "firebase": "^10.11.0",
     "firebaseui": "^6.1.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.3.0",
+    "mongoose": "^8.3.2",
     "nodemon": "^3.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.22.3",
-    "react-scripts": "5.0.1",
+    "react-scripts": "^5.0.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

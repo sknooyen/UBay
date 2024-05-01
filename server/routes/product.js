@@ -43,14 +43,14 @@ router.delete("/:id", async (req, res) =>  {
 })
 
 // GET PRODUCT
-router.get("/find/:id", async (req, res) =>  {
-    try {
-        const product = await Product.findById(req.params.id)
-        res.status(200).json(product);
-    } catch(err) {
-        res.status(500).json(err)
-    }
-})
+// router.get("/find/:id", async (req, res) =>  {
+//     try {
+//         const product = await Product.findById(req.params.id)
+//         res.status(200).json(product);
+//     } catch(err) {
+//         res.status(500).json(err)
+//     }
+// })
 
 //GET ALL
 // router.get("/", async (req, res) =>  {
@@ -71,10 +71,13 @@ router.get("/find/:id", async (req, res) =>  {
 //     }
 // })
 
+// Get request for products with filters
 router.get("/", async (req, res) =>  {
     const qNew = req.query.new;
     const qCategory = req.query.category;
     const qIdEmail = req.query.id_email; // Add this line to extract id_email query parameter
+    const qFavOf = req.query.fav_of;
+    const qID = req.query.id;
     try {
         let products;
         if (qIdEmail) {
@@ -83,9 +86,14 @@ router.get("/", async (req, res) =>  {
             products = await Product.find().sort({ createdAt: -1 }).limit(1);
         } else if (qCategory) {
             products = await Product.find({ category: qCategory });
+        } else if (qFavOf) {
+            products = await Product.find({ favorite_id: qFavOf });
+        } else if (qID) {
+            products = await Product.findOne({ id: qID });
         } else {
             products = await Product.find();
         }
+        console.log(products)
         res.status(200).json(products);
     } catch(err) {
         res.status(500).json(err);

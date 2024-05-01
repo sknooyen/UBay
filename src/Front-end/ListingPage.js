@@ -11,13 +11,14 @@ const ListingPage = () => {
   const navigate = useNavigate();
   const userEmail = auth.currentUser ? auth.currentUser.email : '';
   const { id } = useParams();
-  const [listings, setListing] = useState([]);
+  const [listing, setListing] = useState();
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   const [isFavorite, setIsFavorite] = useState(false);
+  // console.log("listing page")
 
+  //Get the product with the id
   useEffect(() => {
-    axios
-      .get(`http://localhost:8000/api/products/`)
+    axios.get(`http://localhost:8000/api/products?id=${id}`)
       .then((response) => {
         setListing(response.data);
       })
@@ -26,14 +27,15 @@ const ListingPage = () => {
       });
   }, [id]);
 
-  const listing = listings.find((listing) => listing.id == id);
-    
+
+  // console.log("Listing: ", listing);
+
   // set heart color when listing loads
   useEffect(() => {
     if (listing) {
       setIsFavorite(listing.favorite_id.includes(userEmail));
     }
-  }, [listings, userEmail]);
+  }, [listing, userEmail]);
 
   // display loading screen while fetching listing
   if (!listing) {
@@ -74,7 +76,7 @@ const ListingPage = () => {
       condition: listing.condition,
       price: listing.price,// Parse price as a number
       imageURL: listing.imageURL,
-      id_email: userEmail,
+      id_email: listing.id_email,
       favorite_id: updatedFavoriteId
     }
 
