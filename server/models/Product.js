@@ -14,7 +14,8 @@ const ProductSchema = new mongoose.Schema(
         color: {type: String},
         postDate: {type: String},
         id_email: {type: String, default: "unknown@umass.edu", required: true},
-        favorite_id: {type: Array, default: [], required: true}
+        favorite_id: {type: Array, default: [], required: true},
+        report_count: {type: Array}
     },
     {timestamps: true}
 );

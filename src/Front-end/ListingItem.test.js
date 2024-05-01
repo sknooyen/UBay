@@ -7,6 +7,7 @@ const mock_listing = {
     createdAt: "2024-04-15T22:21:08.218Z", 
     description: "Expensive but cool, nice and comfy t-shirt",
     favorite_id: [],
+    report_count: [],
     id: "K10",
     id_email: "shubscher@umass.edu",
     imageURL: ['https://monos.com/cdn/shop/products/Kiyo-UVC-Bottle-500ml-Blue-Hour_900x.png?v=1678603856'],

@@ -33,7 +33,7 @@ const Watchlist = () => {
             })
             .catch(error => console.error('Error fetching products:', error));
     }, [userEmail]);
-    console.log("products: ", products)
+    // console.log("products: ", products)
     return (
         <ListingsLayout title="Watchlist" listings={products}/>
       );
