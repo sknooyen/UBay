@@ -1,4 +1,4 @@
-# Install Anstructions
+# Install Instructions
 
 ## Front-end
 
