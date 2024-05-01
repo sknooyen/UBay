@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Paper, IconButton, Container, Grid, ThemeProvider, Typography } from "@mui/material";
+import { Button, Paper, Snackbar, IconButton, Container, Grid, ThemeProvider, Typography } from "@mui/material";
 import { pageTheme } from "./util";
 import { Favorite } from "@mui/icons-material";
 import { Report } from "@mui/icons-material";
@@ -16,6 +16,7 @@ const ListingPage = () => {
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   const [isFavorite, setIsFavorite] = useState(false);
   const [isReport, setIsReport] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
   // console.log("listing page")
 
   //Get the product with the id
@@ -29,10 +30,7 @@ const ListingPage = () => {
       });
   }, [id]);
 
-
-  // console.log("Listing: ", listing);
-
-  // set heart color when listing loads
+  // set icon colors when listing loads
   useEffect(() => {
     if (listing) {
       setIsFavorite(listing.favorite_id.includes(userEmail));
@@ -59,6 +57,10 @@ const ListingPage = () => {
     );
   };
 
+  const handleCloseAlertMessage = () => {
+    setAlertMessage("");
+  };
+
   const handleReport = () => {
     var updatedReport = [...listing.report_count];
     setIsReport(listing.report_count.includes(userEmail))
@@ -67,6 +69,7 @@ const ListingPage = () => {
     if (isReport) {
       updatedReport = [...listing.report_count].filter(email => email !== userEmail);
     } else {
+      setAlertMessage("✅ Listing reported successfully. After ten reports, this listing will be removed.");
       updatedReport = [...listing.report_count, userEmail];
     }
 
@@ -228,6 +231,13 @@ const ListingPage = () => {
               </Paper>
             </Grid>
           </Grid>
+          <Snackbar
+            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+            open={!!alertMessage}
+            autoHideDuration={6000}
+            onClose={handleCloseAlertMessage}
+            message={alertMessage}
+          />
         </Container>
       </div>
     </ThemeProvider>
