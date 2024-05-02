@@ -64,7 +64,7 @@ const Messages = () => {
     const [inputValue, setInputValue] = useState('');
     const [convo, setConvo] = useState(USERLIST[0])
     const [allMessages, setAllMessages] = useState(messages)
-    const [friends, setFriendsList] = useState(USERLIST)
+    const [friends, setFriends] = useState(USERLIST)
     const messagesEndRef = useRef(null);
 
     useEffect(() => {
@@ -80,28 +80,53 @@ const Messages = () => {
         setInputValue(event.target.value);
     };
 
+    useEffect(() => {
+        let url = `http://localhost:8000/api/messages/getconversations/${USERNAME}`;
+        axios.get(url).then((response) =>{
+            setFriends(response.data)
+        }).catch((error) => {
+            setFriends(["None"]);
+        });
+    }, [friends]);
+
+    //Get the messages list to update and dispaly the new message that was recieved when the other person sends you that message
+    // useEffect(() => {
+    //     let url = `http://localhost:8000/api/messages/conversation/${USERNAME}&${convo}`;
+    //     axios.get(url).then((response) =>{
+    //         setAllMessages(response.data)
+    //     }).catch((error) => {
+    //         setAllMessages(["None"]);
+    //     });
+    // }, [allMessages])
+
     const handleConvoChange = async (name) => {
         setConvo(name)
-        let tempname = "bruh2"
-            // Construct the URL with the provided emails
-            const url = `http://localhost:8000/api/messages/conversation/${USERNAME}&${name}`;
-            axios.get(url).then((response) =>{
-                setAllMessages(response.data)
-            }).catch((error) => {
-                setAllMessages([{text: "they this not working", isSender: true}]);
-            });;
+        // Construct the URL with the provided emails
+        const url = `http://localhost:8000/api/messages/conversation/${USERNAME}&${name}`;
+        axios.get(url).then((response) =>{
+            setAllMessages(response.data)
+        }).catch((error) => {
+            setAllMessages([{text: "they this not working", sender: USERNAME}]);
+        });
 
             //TODO: Change the messages associated with conversation
     }
     const handleSend = (message) => {
         if (inputValue.trim() !== '') {
-          
-            // Add new message to the messages array
-          setAllMessages([...allMessages, message]);
-          //TODO: Send message to the database
-          
-          // Clear the input field after sending a message
-          setInputValue('');
+            const url = `http://localhost:8000/api/messages/postmessage/${USERNAME}&${convo}`
+            const data = {
+                user1: USERNAME,
+                user2: convo,
+                message_objects: [...allMessages, message]
+            }
+            axios.post(url, data).then(res => console.log("sent")).catch(error=>console.log(error))    
+            
+                // Add new message to the messages array
+            setAllMessages([...allMessages, message]);
+            //TODO: Send message to the database
+            
+            // Clear the input field after sending a message
+            setInputValue('');
         } 
       };
 
@@ -121,7 +146,7 @@ const Messages = () => {
                                 <TextField sx={{ m: 2, width: '25ch' }} id="filled-basic" label="Search" variant="filled" />
 
                                 <Stack align="center" direction={"column"} spacing={2}>
-                                    {USERLIST.map(option => 
+                                    {friends.map(option => 
                                         <ListItem align="center" key={option}>
                                             <Button align="center" onClick={() => {handleConvoChange(option);}}>
                                                 {option}
@@ -165,7 +190,7 @@ const Messages = () => {
                                 />
                             </Box>
                             <Button variant="contained" sx={{ position: 'fixed', bottom: '10%', width: '8%', padding: 1, right:'10%' }} 
-                                    onClick={() => { handleSend({text: inputValue, isSender: true}) }}>
+                                    onClick={() => { handleSend({message: inputValue, sender: USERNAME}) }}>
                                     Send
                             </Button>
                     </Grid>
