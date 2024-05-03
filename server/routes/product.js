@@ -3,12 +3,7 @@ const { route } = require("./auth");
 const { verifyToken, verifyTokenAndAuthorization, verifyTokenAndAdmin } = require("./verifyToken")
 
 const router = require("express").Router();
-router.post('/post', (req, res) => {
-    res.send('Post API')
-})
-router.get('/getall', (req, res) => {
-    res.send('get API')
-})
+
 router.post("/", async (req, res) => {
     const newProduct = new Product(req.body)
 
