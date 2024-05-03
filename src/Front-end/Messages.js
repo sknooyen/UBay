@@ -66,6 +66,7 @@ const Messages = () => {
     const [allMessages, setAllMessages] = useState(messages)
     const [friends, setFriends] = useState(USERLIST)
     const messagesEndRef = useRef(null);
+    const [screenHeight, setScreenHeight] = useState(window.innerHeight)
 
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -130,56 +131,55 @@ const Messages = () => {
         } 
       };
 
-    return (    
-        <ThemeProvider theme = {pageTheme}>
-            <div>
-                <NavBar />
-                <Container>
-                    <Grid container spacing={2}>
-                        <Grid item xs={3}>
-                            <Paper>
+      return (<ThemeProvider theme={pageTheme}>
+        <div>
+            <NavBar />
+            <Container sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                <Grid container spacing={2} sx={{ flex: 1 }}>
+                    <Grid item xs={3}>
+                        <Paper>
                             <Box sx={{
-                                        maxHeight: 500,
-                                        overflowY: 'auto',
-                                        margin: 'auto'}}>
+                                height: screenHeight * 0.7,
+                                overflowY: 'auto',
+                                margin: 'auto'
+                            }}>
                                 <Typography align="center" variant="h6">Conversations</Typography>
                                 <TextField sx={{ m: 2, width: '25ch' }} id="filled-basic" label="Search" variant="filled" />
-
+    
                                 <Stack align="center" direction={"column"} spacing={2}>
-                                    {friends.map(option => 
+                                    {friends.map(option =>
                                         <ListItem align="center" key={option}>
-                                            <Button align="center" onClick={() => {handleConvoChange(option);}}>
+                                            <Button align="center" onClick={() => { handleConvoChange(option); }}>
                                                 {option}
                                             </Button>
                                         </ListItem>
                                     )}
                                 </Stack>
                             </Box>
-                            </Paper>
-                        </Grid>
-                        <Grid item xs={9}>
-                            <Paper>
-                                <Typography align="center" variant="h6">{convo}</Typography>
-                                <Box sx={{
-                                        maxHeight: 500,
-                                        overflowY: 'auto',
-                                        margin: 'auto'}}>
-                                    <List>
-                                        {allMessages.map((message, index) => (
-                                            <ListItem key={index} sx={{
-                                                display: 'flex',
-                                                justifyContent: message.sender==USERNAME ? 'flex-end' : 'flex-start',
-                                                padding: '10px'
-                                            }}>
+                        </Paper>
+                    </Grid>
+                    <Grid item xs={9}>
+                        <Paper>
+                            <Typography align="center" variant="h6">{convo}</Typography>
+                            <Box sx={{
+                                height: screenHeight * 0.57,
+                                overflowY: 'auto',
+                                margin: 'auto'
+                            }}>
+                                <List>
+                                    {allMessages.map((message, index) => (
+                                        <ListItem key={index} sx={{
+                                            display: 'flex',
+                                            justifyContent: message.sender == USERNAME ? 'flex-end' : 'flex-start',
+                                            padding: '10px'
+                                        }}>
                                             <Typography variant="body1">{message.message}</Typography>
                                         </ListItem>
-                                        ))}
-                                        <div ref={messagesEndRef} />
-                                    </List>
-                                </Box>
-                            </Paper>
-                        </Grid>
-                            <Box sx={{ position: 'fixed', bottom: "8%", width: '50%', padding: 1, right:'19%' }}>
+                                    ))}
+                                    <div ref={messagesEndRef} />
+                                </List>
+                            </Box>
+                            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 'auto', paddingTop: '6px' }}>
                                 <TextField
                                     fullWidth
                                     multiline
@@ -188,15 +188,18 @@ const Messages = () => {
                                     value={inputValue}
                                     onChange={handleInputChange}
                                 />
+                                <Box sx={{ marginLeft: '10px' }}> {/* Added margin to create space */}
+                                    <Button variant="contained" onClick={() => { handleSend({ message: inputValue, sender: USERNAME }) }}>
+                                        Send
+                                    </Button>
+                                </Box>
                             </Box>
-                            <Button variant="contained" sx={{ position: 'fixed', bottom: '10%', width: '8%', padding: 1, right:'10%' }} 
-                                    onClick={() => { handleSend({message: inputValue, sender: USERNAME}) }}>
-                                    Send
-                            </Button>
+                        </Paper>
                     </Grid>
-                </Container>
-            </div>
-        </ThemeProvider>
+                </Grid>
+            </Container>
+        </div>
+    </ThemeProvider>
     )
 }
 
