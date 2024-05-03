@@ -30,14 +30,16 @@ function SignIn(){
 return (
     <>
     <ThemeProvider theme={pageTheme}>
-    <AppBar position="sticky">
+    <AppBar>
     <h1>UBay</h1>
     </AppBar>
-    <div className="login-container">
-    {value?navigate('/home'):
-        <button disabled={loading} onClick={handleClick}>Sign In With Google</button>
+    <div className="login">
+        <div className="login-container">
+        {value?navigate('/home'):
+            <button className="logB" disabled={loading} onClick={handleClick}>Sign In With UMass Email</button>
         }
-    <h4> UMass Email Only </h4>
+ 
+        </div>
     </div>
     </ThemeProvider>
     </>
