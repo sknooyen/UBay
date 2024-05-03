@@ -9,7 +9,6 @@ import Watchlist from './Front-end/Watchlist';
 import Sell from './Front-end/Sell';
 import Messages from './Front-end/Messages';
 import SignIn from './login/signin';
-import SignOut from './login/signout';
 import ListingPage from './Front-end/ListingPage';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -23,7 +22,6 @@ root.render(
             <Route path="/sell" element={<Sell />} />
             <Route path="/messages" element={<Messages />} />
             <Route path="/" element={<SignIn />} />
-            <Route path="/signout" element={<SignOut/>} />
             <Route path="/listing/:id" element={<ListingPage />} /> 
       </Routes>
     </BrowserRouter>
