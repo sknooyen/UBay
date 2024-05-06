@@ -72,24 +72,21 @@
     justify-content:space-between;
 }
 .chatMessageInput{
-    width: 100%;
+    width: 80%;
     height: 20px;
     padding: 10px;
     border-radius: 20px;
 
 }
 .chatSubmitButton{
-    width: 70px;
-    height: 40px;
+    width: 120px;
+    height: 60px;
     border: none;
     border-radius: 5px;
     background-color: red;
     color: white;
     cursor: pointer
 }
-/* .chatOnline{
-    flex: 1.5;
-} */
 .chatMenuWrapper{
     padding: 10px;
     height: 100%;

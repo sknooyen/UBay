@@ -1,12 +1,25 @@
 import NavBar from "./NavBar";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { TextField, Button, Snackbar, Paper, Container, MenuItem, Grid, ThemeProvider, Typography } from "@mui/material";
 import { CATEGORIES, CONDITIONS, pageTheme } from "./util";
 import axios from 'axios';
+<<<<<<< HEAD
 import { useAuth } from "../login/loginconfig";
 
 const Sell = () => {
   const currentUser = useAuth()
+=======
+import { auth } from "../login/loginconfig";
+
+const Sell = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  
+  const userEmail = auth.currentUser ? auth.currentUser.email : '';
+  const [listings, setListing] = useState([]);
+  const [editMode, setEditMode] = useState(false);
+>>>>>>> fe318ccdd39eec483b583aab6f16bb489217434f
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
@@ -86,8 +99,9 @@ const Sell = () => {
       // if any component is missing, alert
       setAlertMessage("⚠️ All fields are required to create a listing.");
     } else {
-      // TODO: add posting logic
       console.log({ title, price, description, category, condition, photos });
+      // Get the email here
+      const userEmail = auth.currentUser ? auth.currentUser.email : '';
       // Upload to back-end
       const data = {
         title,
@@ -96,6 +110,9 @@ const Sell = () => {
         condition,
         price: parseFloat(price), // Parse price as a number
         imageURL: photos,
+        id_email: userEmail,
+        favorite_id: [],
+        report_id: []
       }
 
       // This needs to be async, upload then clean
@@ -124,7 +141,111 @@ const Sell = () => {
     }
   };
 
+<<<<<<< HEAD
   return (currentUser &&
+=======
+  const handleCancel = () => {
+    navigate('/')
+  };
+
+  const handleDelete = () => {
+    // TODO: implement delete
+    if (listing && listing._id) {
+      axios.delete(`http://localhost:8000/api/products/${listing._id}`)
+        .then(() => {
+          // Clear form fields
+          setTitle("");
+          setPrice("");
+          setDescription("");
+          setCategory("");
+          setCondition("");
+          setPhotos([]);
+          setCurrentPhotoIndex(0);
+          setAlertMessage("✅ Listing deleted successfully.");
+          navigate('/');
+        })
+        .catch((error) => {
+          console.error("Error deleting listing:", error);
+          setAlertMessage("⚠️ Error deleting listing. Please try again.");
+        });
+    }
+  };
+
+  const handleUpdate = () => {
+    // TODO: implement update
+    if (listing && listing._id) {
+      const data = {
+        title,
+        category: category,
+        description,
+        condition,
+        price: parseFloat(price),
+        imageURL: photos,
+        id_email: userEmail,
+        favorite_id: [],
+        report_count: []
+      };
+  
+      axios.put(`http://localhost:8000/api/products/${listing._id}`, data)
+        .then(() => {
+          setAlertMessage("✅ Listing updated successfully.");
+          navigate('/')
+        })
+        .catch((error) => {
+          console.error("Error updating listing:", error);
+          setAlertMessage("⚠️ Error updating listing. Please try again.");
+        });
+    }
+  };
+
+  // if id is in url, load all listings
+  useEffect(() => {
+    if(id) {
+      axios
+        .get(`http://localhost:8000/api/products/`)
+        .then((response) => {
+          setListing(response.data);
+          const listing = response.data.find((listing) => listing.id === id);
+
+          // update fields to contain listing information
+          if (listing) {
+            setTitle(listing.title);
+            setPrice(listing.price);
+            setDescription(listing.description);
+            setCategory(listing.category);
+            setCondition(listing.condition);
+            setPhotos(listing.imageURL);
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching listing details:", error);
+        });
+    } else {
+      setTitle("");
+      setPrice("");
+      setDescription("");
+      setCategory("");
+      setCondition("");
+      setPhotos([]);
+      setEditMode(false);
+    }
+  }, [id]);
+
+  const listing = listings.find((listing) => listing.id == id);
+
+  // if not authorized owner of this listing, go back to home page, otherwise, set to edit mode
+  useEffect(() => {
+    if (listing && !(listing.id_email == userEmail)) {
+      navigate('/');
+    } else {
+      if (listing) {
+        setEditMode(true)
+      }
+    }
+  }, [listing, userEmail]);
+
+  return (
+>>>>>>> fe318ccdd39eec483b583aab6f16bb489217434f
     <ThemeProvider theme={pageTheme}>
       <NavBar />
       <div>
@@ -272,14 +393,45 @@ const Sell = () => {
                     </MenuItem>
                   ))}
                 </TextField>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handlePost}
-                  fullWidth
-                >
-                  Post
-                </Button>
+                {editMode ? ( // render cancel, delete, and update buttons if editMode is true
+                    <>
+                      <div style={{ display: "flex", justifyContent: "space-between" }}>
+                        <Button
+                        variant="contained"
+                        color="grey"
+                        onClick={handleCancel}
+                        style={{ width: "30%" }}
+                        >
+                        Cancel
+                        </Button>
+                        <Button
+                        variant="contained"
+                        color="grey"
+                        onClick={handleDelete}
+                        style={{ width: "30%" }}
+                        >
+                        Delete
+                        </Button>
+                        <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={handleUpdate}
+                        style={{ width: "30%" }}
+                        >
+                        Update
+                        </Button>
+                    </div>
+                    </>
+                  ) : ( // otherwise, render Post button
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={handlePost}
+                      fullWidth
+                    >
+                      Post
+                    </Button>
+                  )}                  
               </Grid>
             </Grid>
             </Paper>

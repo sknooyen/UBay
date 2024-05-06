@@ -1,14 +1,17 @@
 import React, { useState, useMemo } from 'react';
 import { Typography, Container, Grid, Paper, TextField, ThemeProvider, List, ListItem, Checkbox, ListItemText, Slider, Input, MenuItem, Select } from '@mui/material';
-import {CATEGORIES, CONDITIONS, SORTING, MAXPRICE, pageTheme, SortList} from './util';
+import {CATEGORIES, CONDITIONS, SORTING, MAXPRICE, pageTheme} from './util';
 import { useNavigate } from 'react-router-dom';
 import NavBar from './NavBar'
 import ListingItem from './ListingItem';
+import { auth } from "../login/loginconfig";
 
 const ListingsLayout = (props) => {
   const navigate = useNavigate();
-  const {title, listings} = props
-
+  const userEmail = auth.currentUser ? auth.currentUser.email : '';
+  const title = props.title;
+  let listings = props.listings;
+  console.log(listings);
   const [checkedCategories, setCheckedCategories] = useState(CATEGORIES);
   const [checkedConditions, setCheckedConditions] = useState(CONDITIONS);
   const [priceRange, setPriceRange] = useState([0, MAXPRICE]);
@@ -18,14 +21,32 @@ const ListingsLayout = (props) => {
 
   useMemo(() => {
     console.log(search)
-    setFilteredListings(SortList(listings.filter(listing => 
+    switch (sortBy) {
+      case 'Price: Low to High':
+        listings.sort((a, b) => a.price - b.price);
+        break;
+      case 'Price: High to Low':
+        listings.sort((a, b) => b.price - a.price);
+        break;
+      case 'Post Date: New to Old':
+        listings.sort((a, b) => new Date(b.postDate) - new Date(a.postDate));
+        break;
+      case 'Post Date: Old to New':
+        listings.sort((a, b) => new Date(a.postDate) - new Date(b.postDate));
+        break;
+      default:
+        // TODO: implement best match (right now it just displays everything in the arrays original order)
+  
+        break;
+    }
+    setFilteredListings(listings.filter(listing => 
       listing.category.some(category => checkedCategories.includes(category)) &&
       checkedConditions.includes(listing.condition) &&
       listing.price >= priceRange[0] && 
       listing.price <= priceRange[1] &&
       listing.title.toLowerCase().includes(search.toLowerCase())
     )
-    ), sortBy);
+    );
   }, [checkedCategories, checkedConditions, priceRange, sortBy, listings, search]);
 
   const handleToggleCategory = (category) => () => {
@@ -71,7 +92,14 @@ const ListingsLayout = (props) => {
   };
 
   const handleListingClick = (listing) => {
-    const extension = '/listing/' + listing.id;
+    var extension = '/'
+
+    if (listing.id_email == userEmail) {
+      extension = '/sell/' + listing.id;
+    } else {
+      extension = '/listing/' + listing.id;
+    }
+
     navigate(extension);
   };
 

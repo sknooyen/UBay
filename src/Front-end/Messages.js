@@ -1,6 +1,12 @@
 import "./Messages.css"
 import NavBar from "./NavBar";
+<<<<<<< HEAD
 import { useAuth } from "../login/loginconfig";
+=======
+
+import { pageTheme } from "./util";
+
+>>>>>>> fe318ccdd39eec483b583aab6f16bb489217434f
 export const Conversation = () =>{
     return(
         <div className="conversation">
@@ -24,7 +30,7 @@ const Messages = () => {
     return (currentUser &&
         <>
             <NavBar />
-            <h1>Messages</h1>
+            <h1>Direct Messages</h1>
             <div className="messenger">
                 <div className="chatMenu">
                     <div className="chatMenuWrapper">

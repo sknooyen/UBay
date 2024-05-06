@@ -1,25 +1,32 @@
 import React, { useState, useEffect } from "react";
-import { Button, Paper, Container, Grid, ThemeProvider, Typography } from "@mui/material";
+import { Button, Paper, Snackbar, IconButton, Container, Grid, ThemeProvider, Typography } from "@mui/material";
 import { pageTheme } from "./util";
+import { Favorite } from "@mui/icons-material";
+import { Report } from "@mui/icons-material";
 import axios from "axios";
 import NavBar from "./NavBar";
 import { useParams, useNavigate } from "react-router-dom";
+<<<<<<< HEAD
 import { useAuth } from "../login/loginconfig";
+=======
+import { auth } from "../login/loginconfig";
+>>>>>>> fe318ccdd39eec483b583aab6f16bb489217434f
 
 const ListingPage = () => {
   const currentUser = useAuth()
   const navigate = useNavigate();
+  const userEmail = auth.currentUser ? auth.currentUser.email : '';
   const { id } = useParams();
-  const [listings, setListing] = useState([]);
+  const [listing, setListing] = useState();
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [isReport, setIsReport] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  // console.log("listing page")
 
-  // TODO: replace with actual user logic
-  const name = "Sabrina";
-  const date = "01/01/2025";
-
+  //Get the product with the id
   useEffect(() => {
-    axios
-      .get(`http://localhost:8000/api/products/`)
+    axios.get(`http://localhost:8000/api/products?id=${id}`)
       .then((response) => {
         setListing(response.data);
       })
@@ -28,7 +35,13 @@ const ListingPage = () => {
       });
   }, [id]);
 
-  const listing = listings.find((listing) => listing.id == id);
+  // set icon colors when listing loads
+  useEffect(() => {
+    if (listing) {
+      setIsFavorite(listing.favorite_id.includes(userEmail));
+      setIsReport(listing.report_count.includes(userEmail));
+    }
+  }, [listing, userEmail]);
 
   // display loading screen while fetching listing
   if (!listing) {
@@ -49,6 +62,93 @@ const ListingPage = () => {
     );
   };
 
+  const handleCloseAlertMessage = () => {
+    setAlertMessage("");
+  };
+
+  const handleReport = () => {
+    var updatedReport = [...listing.report_count];
+    setIsReport(listing.report_count.includes(userEmail))
+
+    // update depending on whether or not this product is already reported
+    if (isReport) {
+      updatedReport = [...listing.report_count].filter(email => email !== userEmail);
+    } else {
+      setAlertMessage("✅ Listing reported successfully. After ten reports, this listing will be removed.");
+      updatedReport = [...listing.report_count, userEmail];
+    }
+
+    const reportData = {
+      id: listing.id,
+      title: listing.title,
+      category: listing.category, // Ensure category is sent as an array as per backend schema
+      description: listing.description,
+      condition: listing.condition,
+      price: listing.price,// Parse price as a number
+      imageURL: listing.imageURL,
+      id_email: listing.id_email,
+      favorite_id: listing.favorite_id,
+      report_count: updatedReport
+    }
+
+    axios.put(`http://localhost:8000/api/products/${listing._id}`, reportData)
+      .then(response => {
+        console.log("Reports updated on listing:", response.data);
+        listing.report_count = updatedReport;
+        setIsReport(!isReport)
+
+        if (updatedReport.length >= 10) {
+          axios.delete(`http://localhost:8000/api/products/${listing._id}`)
+            .then(response => {
+              console.log("Listing deleted:", response.data);
+              // Perform any additional actions needed after deletion
+            })
+            .catch(error => {
+              console.error("Error deleting listing:", error);
+            });
+        }
+      })
+      .catch(error => {
+        console.error("Error adding listing to Report:", error);
+      });
+  }
+
+  const handleFavorite = () => {
+    var updatedFavoriteId = ""
+
+    setIsFavorite(listing.favorite_id.includes(userEmail))
+
+    // update depending on whether or not this product is already favorited
+    if (isFavorite) {
+      updatedFavoriteId = [...listing.favorite_id].filter(email => email !== userEmail);
+    } else {
+      updatedFavoriteId = [...listing.favorite_id, userEmail];
+    }
+
+    const favoriteData = {
+      id: listing.id,
+      title: listing.title,
+      category: listing.category, // Ensure category is sent as an array as per backend schema
+      description: listing.description,
+      condition: listing.condition,
+      price: listing.price,// Parse price as a number
+      imageURL: listing.imageURL,
+      id_email: listing.id_email,
+      report_count: listing.report_count,
+      favorite_id: updatedFavoriteId
+    }
+
+    axios.put(`http://localhost:8000/api/products/${listing._id}`, favoriteData)
+      .then(response => {
+        console.log("Favorites updated on listing:", response.data);
+        listing.favorite_id = updatedFavoriteId
+        setIsFavorite(!isFavorite)
+      })
+      .catch(error => {
+        console.error("Error adding listing to favorites:", error);
+      });
+  };
+
   return (
     currentUser &&
     <ThemeProvider theme={pageTheme}>
@@ -57,9 +157,24 @@ const ListingPage = () => {
         <Container>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <Paper>
+              <Paper style={{ position: "relative" }}>
                 <Typography variant="h4" gutterBottom>{listing.title} – ${listing.price}</Typography>
-                <Typography variant="h8" fontStyle='oblique' gutterBottom>Posted by {name} on {date}</Typography>
+                <IconButton
+                  onClick={handleFavorite}
+                  color={isFavorite ? "primary" : "default"}
+                  style={{ position: "absolute", top: 0, right: 0, margin: "10px" }}
+                >
+                  <Favorite />
+                </IconButton>
+                <IconButton
+                  onClick={handleReport}
+                  color={isReport ? "primary" : "default"}
+                  style={{ position: "absolute", top: 0, right: 40, margin: "10px" }}
+                >
+                  <Report />
+                </IconButton>
+                <Typography variant="body2" style={{ position: "absolute", top: 40, right: 66 }}>{listing.report_count.length}</Typography>
+                <Typography variant="h8" fontStyle='oblique' gutterBottom>Posted by {listing.id_email.substring(0, listing.id_email.indexOf('@'))} on {listing.updatedAt.substring(0, 10)}</Typography>
                 <Grid container spacing={2}>
                   <Grid item xs={6}>
                     <div
@@ -122,6 +237,13 @@ const ListingPage = () => {
               </Paper>
             </Grid>
           </Grid>
+          <Snackbar
+            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+            open={!!alertMessage}
+            autoHideDuration={6000}
+            onClose={handleCloseAlertMessage}
+            message={alertMessage}
+          />
         </Container>
       </div>
     </ThemeProvider>

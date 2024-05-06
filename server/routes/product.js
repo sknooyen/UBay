@@ -1,9 +1,7 @@
 const Product = require("../models/Product");
-const { route } = require("./auth");
-const { verifyToken, verifyTokenAndAuthorization, verifyTokenAndAdmin } = require("./verifyToken")
-
 const router = require("express").Router();
 
+// Make new
 router.post("/", async (req, res) => {
     const newProduct = new Product(req.body)
 
@@ -16,8 +14,8 @@ router.post("/", async (req, res) => {
     }
 })
 
-// //UPDATE
-router.put("/:id", verifyTokenAndAdmin, async (req, res) => {
+// Update
+router.put("/:id", async (req, res) => {
   try {
     const updatedProduct = await Product.findByIdAndUpdate(
       req.params.id,
@@ -32,8 +30,8 @@ router.put("/:id", verifyTokenAndAdmin, async (req, res) => {
   }
 });
 
-// //DELETE
-router.delete("/:id", verifyTokenAndAdmin, async (req, res) =>  {
+// Delete
+router.delete("/:id", async (req, res) =>  {
     try {
         await Product.findByIdAndDelete(req.params.id)
         res.status(200).json("Product has been deleted...")
@@ -42,59 +40,33 @@ router.delete("/:id", verifyTokenAndAdmin, async (req, res) =>  {
     }
 })
 
-// GET PRODUCT
-router.get("/find/:id", async (req, res) =>  {
-    try {
-        const product = await Product.findById(req.params.id)
-        res.status(200).json(product);
-    } catch(err) {
-        res.status(500).json(err)
-    }
-})
-
-//GET ALL
+// Get request for products with filters
 router.get("/", async (req, res) =>  {
     const qNew = req.query.new;
     const qCategory = req.query.category;
+    const qIdEmail = req.query.id_email; // Add this line to extract id_email query parameter
+    const qFavOf = req.query.fav_of;
+    const qID = req.query.id;
     try {
         let products;
-        if (qNew){
-            products = await Product.find().sort({createdAt: -1}).limit(1);
+        if (qIdEmail) {
+            products = await Product.find({ id_email: qIdEmail }); // Filter products by id_email if the query parameter is provided
+        } else if (qNew) {
+            products = await Product.find().sort({ createdAt: -1 }).limit(1);
         } else if (qCategory) {
-            products = await Product.find({category: qCategory});
+            products = await Product.find({ category: qCategory });
+        } else if (qFavOf) {
+            products = await Product.find({ favorite_id: qFavOf });
+        } else if (qID) {
+            products = await Product.findOne({ id: qID });
         } else {
             products = await Product.find();
         }
+        console.log(products)
         res.status(200).json(products);
     } catch(err) {
         res.status(500).json(err);
     }
 })
-
-// //GET USER STATs
-// router.get("/stats", verifyTokenAndAdmin, async (req, res) => {
-//     const date = new Date();
-//     const lastYear = new Date(date.setFullYear(date.getFullYear() - 1));
-
-//     try {
-//         const data = await User.aggregate([
-//             {$match: {createdAt: {$gte: lastYear}}},
-//             {
-//                 $project: {
-//                     month: {$month: "$createdAt"}
-//                 }
-//             },
-//             {
-//                 $group: {
-//                     _id: "$month",
-//                     total: {$sum: 1}
-//                 }
-//             }
-//         ])
-//         res.status(200).json(data)
-//     } catch(err) {
-//         res.status(500).json(err)
-//     }
-// })
 
 module.exports = router

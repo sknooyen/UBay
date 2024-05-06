@@ -23,6 +23,7 @@ root.render(
             <Route path="/messages" element={<Messages />} />
             <Route path="/" element={<SignIn />} />
             <Route path="/listing/:id" element={<ListingPage />} /> 
+            <Route path="/sell/:id" element={<Sell />} /> 
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
