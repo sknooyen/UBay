@@ -4,7 +4,6 @@ import axios from 'axios';
 import { useAuth } from '../login/loginconfig';
 
 const HomePage = () => {
-
   const [listings, setListings] = useState([]);
   const currentUser = useAuth()
 
@@ -21,7 +20,7 @@ const HomePage = () => {
 
   return (
     currentUser && 
-     // render the listings homepage using the listings data
+    // render the listings homepage using the listings data
     <ListingsLayout title="Listings" listings={listings}/>
   );
 };

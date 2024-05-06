@@ -5,11 +5,12 @@ import { Favorite } from "@mui/icons-material";
 import { Report } from "@mui/icons-material";
 import axios from "axios";
 import NavBar from "./NavBar";
-import { useParams, useNavigate } from "react-router-dom";
-import { useAuth } from "../login/loginconfig";
-import { auth } from "../login/loginconfig";
+import { useParams} from "react-router-dom";
+import { useAuth, auth } from "../login/loginconfig";
+
 
 const ListingPage = () => {
+  const currentUser = useAuth();
   const userEmail = auth.currentUser ? auth.currentUser.email : '';
   const { id } = useParams();
   const [listing, setListing] = useState();

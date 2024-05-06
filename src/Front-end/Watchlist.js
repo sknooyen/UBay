@@ -1,5 +1,5 @@
 import ListingsLayout from "./ListingsLayout";
-import { useAuth } from "../login/loginconfig";
+import { useAuth, auth } from "../login/loginconfig";
 import { useState, useEffect } from 'react';
 
 
