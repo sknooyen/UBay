@@ -6,10 +6,10 @@ const HomePage = () => {
 
   const [listings, setListings] = useState([]);
 
+  // fetch all listings data from the database
   useEffect(() => {
     axios.get('http://localhost:8000/api/products')
     .then(response => {
-      console.log('Response:', response.data); // Log the response data
       setListings(response.data);
     })
     .catch(error => {
@@ -18,6 +18,7 @@ const HomePage = () => {
   }, []);
 
   return (
+    // render the listings homepage using the listings data
     <ListingsLayout title="Listings" listings={listings}/>
   );
 };
