@@ -3,18 +3,11 @@ import { Typography, Grid, Container, Paper, ThemeProvider, Button, Dialog, Dial
 import { pageTheme } from "./util";
 import ListingItem from './ListingItem';
 import NavBar from "./NavBar";
-<<<<<<< HEAD
 import { useAuth } from '../login/loginconfig';
-
-const Profile = () => {
-    const currentUser = useAuth()
-    // TODO: add actual name logic
-    const name = "Professor Rattigan";
-=======
-import { auth } from "../login/loginconfig";
 import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
+    const currentUser = useAuth()
     const navigate = useNavigate();
     
     const [products, setProducts] = useState([]);
@@ -23,7 +16,6 @@ const Profile = () => {
     // Mocked user email for testing
     // const userEmail = 'bnnguyen@umass.edu';
     const userEmail = auth.currentUser ? auth.currentUser.email : '';
->>>>>>> fe318ccdd39eec483b583aab6f16bb489217434f
 
     useEffect(() => {
         // Fetch products associated with userEmail

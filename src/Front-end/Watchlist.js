@@ -1,24 +1,14 @@
 import ListingsLayout from "./ListingsLayout";
-<<<<<<< HEAD
 import { useAuth } from "../login/loginconfig";
+import { useState, useEffect } from 'react';
+
 
 const Watchlist = () => {
     const currentUser = useAuth()
-    const temp_listings = [
-        { id: 1, title: 'Fav CS 121 Textbook', category: ['Books'], description: 'So many pages—all so exciting!', condition: 'Like New', price: 15, imageURL: ['https://www.mrporter.com/variants/images/38063312418276845/in/w2000_q60.jpg'], postDate: '2024-03-28' },
-        { id: 2, title: 'Fav Chair', category: ['Furniture'], description: 'Good for sitting in. Excellent for dancing on.', condition: 'Very Good', price: 50, imageURL: ['https://www.mrporter.com/variants/images/38063312418276845/in/w2000_q60.jpg'], postDate: '2024-03-27' },
-      ];
-=======
-import { useState, useEffect } from 'react';
-import { auth } from "../login/loginconfig";
-
-const Watchlist = () => {
-
     // const temp_listings = [
     //     { id: 1, title: 'Fav CS 121 Textbook', category: ['Books'], description: 'So many pages—all so exciting!', condition: 'Like New', price: 15, imageURL: ['https://www.mrporter.com/variants/images/38063312418276845/in/w2000_q60.jpg'], postDate: '2024-03-28' },
     //     { id: 2, title: 'Fav Chair', category: ['Furniture'], description: 'Good for sitting in. Excellent for dancing on.', condition: 'Very Good', price: 50, imageURL: ['https://www.mrporter.com/variants/images/38063312418276845/in/w2000_q60.jpg'], postDate: '2024-03-27' },
     //   ];
->>>>>>> fe318ccdd39eec483b583aab6f16bb489217434f
 
     const [products, setProducts] = useState([]);
     const userEmail = auth.currentUser ? auth.currentUser.email : '';
@@ -46,11 +36,8 @@ const Watchlist = () => {
     }, [userEmail]);
     // console.log("products: ", products)
     return (
-<<<<<<< HEAD
-        currentUser && <ListingsLayout title="Watchlist" listings={temp_listings}/>
-=======
+        currentUser &&
         <ListingsLayout title="Watchlist" listings={products}/>
->>>>>>> fe318ccdd39eec483b583aab6f16bb489217434f
       );
 }
 

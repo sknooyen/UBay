@@ -4,22 +4,16 @@ import { useParams, useNavigate } from "react-router-dom";
 import { TextField, Button, Snackbar, Paper, Container, MenuItem, Grid, ThemeProvider, Typography } from "@mui/material";
 import { CATEGORIES, CONDITIONS, pageTheme } from "./util";
 import axios from 'axios';
-<<<<<<< HEAD
 import { useAuth } from "../login/loginconfig";
 
 const Sell = () => {
   const currentUser = useAuth()
-=======
-import { auth } from "../login/loginconfig";
-
-const Sell = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   
   const userEmail = auth.currentUser ? auth.currentUser.email : '';
   const [listings, setListing] = useState([]);
   const [editMode, setEditMode] = useState(false);
->>>>>>> fe318ccdd39eec483b583aab6f16bb489217434f
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
@@ -141,9 +135,6 @@ const Sell = () => {
     }
   };
 
-<<<<<<< HEAD
-  return (currentUser &&
-=======
   const handleCancel = () => {
     navigate('/')
   };
@@ -245,7 +236,7 @@ const Sell = () => {
   }, [listing, userEmail]);
 
   return (
->>>>>>> fe318ccdd39eec483b583aab6f16bb489217434f
+    currentUser &&
     <ThemeProvider theme={pageTheme}>
       <NavBar />
       <div>
