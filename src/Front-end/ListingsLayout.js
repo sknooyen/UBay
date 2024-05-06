@@ -11,7 +11,6 @@ const ListingsLayout = (props) => {
   const userEmail = auth.currentUser ? auth.currentUser.email : '';
   const title = props.title;
   let listings = props.listings;
-  console.log(listings);
   const [checkedCategories, setCheckedCategories] = useState(CATEGORIES);
   const [checkedConditions, setCheckedConditions] = useState(CONDITIONS);
   const [priceRange, setPriceRange] = useState([0, MAXPRICE]);
@@ -19,8 +18,9 @@ const ListingsLayout = (props) => {
   const [search, setSearch] = useState('');
   const [filteredListings, setFilteredListings] = useState([])
 
+  // update the displayed listings based on filters
   useMemo(() => {
-    console.log(search)
+    // order based on sortBy dropdown
     switch (sortBy) {
       case 'Price: Low to High':
         listings.sort((a, b) => a.price - b.price);
@@ -36,9 +36,9 @@ const ListingsLayout = (props) => {
         break;
       default:
         // TODO: implement best match (right now it just displays everything in the arrays original order)
-  
         break;
     }
+    // apply selected filters and search
     setFilteredListings(listings.filter(listing => 
       listing.category.some(category => checkedCategories.includes(category)) &&
       checkedConditions.includes(listing.condition) &&
@@ -49,6 +49,7 @@ const ListingsLayout = (props) => {
     );
   }, [checkedCategories, checkedConditions, priceRange, sortBy, listings, search]);
 
+  // filter by category
   const handleToggleCategory = (category) => () => {
     setCheckedCategories(prev => {
       if (prev.includes(category)) {
@@ -59,6 +60,7 @@ const ListingsLayout = (props) => {
     });
   };
 
+  // filter by condition
   const handleToggleCondition = (condition) => () => {
     setCheckedConditions(prev => {
       if (prev.includes(condition)) {
@@ -69,10 +71,12 @@ const ListingsLayout = (props) => {
     });
   };
 
-  const handlePriceChange = (event, newValue) => {
+  // filter by price
+  const handlePriceChange = (_event, newValue) => {
     setPriceRange(newValue);
   };
 
+  // filter by price
   const handlePriceInputChange = (index) => (event) => {
     const newPriceRange = [...priceRange];
     newPriceRange[index] = event.target.value === '' ? '' : Number(event.target.value);
@@ -87,14 +91,16 @@ const ListingsLayout = (props) => {
     }
   };
 
+  // filter by sort dropdown
   const handleSortChange = (event) => {
     setSortBy(event.target.value);
   };
 
+  // open individual listing page
   const handleListingClick = (listing) => {
     var extension = '/'
 
-    if (listing.id_email == userEmail) {
+    if (listing.id_email === userEmail) {
       extension = '/sell/' + listing.id;
     } else {
       extension = '/listing/' + listing.id;
