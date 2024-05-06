@@ -8,10 +8,10 @@ const HomePage = () => {
   const [listings, setListings] = useState([]);
   const currentUser = useAuth()
 
+  // fetch all listings data from the database
   useEffect(() => {
     axios.get('http://localhost:8000/api/products')
     .then(response => {
-      console.log('Response:', response.data); // Log the response data
       setListings(response.data);
     })
     .catch(error => {
@@ -20,7 +20,9 @@ const HomePage = () => {
   }, []);
 
   return (
-    currentUser && <ListingsLayout title="Listings" listings={listings}/>
+    currentUser && 
+     // render the listings homepage using the listings data
+    <ListingsLayout title="Listings" listings={listings}/>
   );
 };
 

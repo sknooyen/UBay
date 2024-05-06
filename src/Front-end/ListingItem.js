@@ -1,6 +1,7 @@
 import React from 'react';
 import { Typography, Paper } from '@mui/material';
 
+// individual listing item
 const ListingItem = ({ listing, handleListingClick }) => {
   return (
     <div

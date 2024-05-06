@@ -126,7 +126,7 @@ const Sell = () => {
         console.error('Error posting data:', error);
 
         // alert user of post failure -- if payload is too large, explain that
-        if (error.response.status == 413) {
+        if (error.response.status === 413) {
           setAlertMessage("⚠️ Error posting listing. Please upload images less than " + maxSize + " in total.");
         } else {
           setAlertMessage("⚠️ Error posting listing. Please try again.");
@@ -140,7 +140,6 @@ const Sell = () => {
   };
 
   const handleDelete = () => {
-    // TODO: implement delete
     if (listing && listing._id) {
       axios.delete(`http://localhost:8000/api/products/${listing._id}`)
         .then(() => {
@@ -163,7 +162,6 @@ const Sell = () => {
   };
 
   const handleUpdate = () => {
-    // TODO: implement update
     if (listing && listing._id) {
       const data = {
         title,
@@ -222,18 +220,18 @@ const Sell = () => {
     }
   }, [id]);
 
-  const listing = listings.find((listing) => listing.id == id);
+  const listing = listings.find((listing) => listing.id === id);
 
   // if not authorized owner of this listing, go back to home page, otherwise, set to edit mode
   useEffect(() => {
-    if (listing && !(listing.id_email == userEmail)) {
+    if (listing && !(listing.id_email === userEmail)) {
       navigate('/');
     } else {
       if (listing) {
         setEditMode(true)
       }
     }
-  }, [listing, userEmail]);
+  }, [listing, userEmail, navigate]);
 
   return (
     currentUser &&

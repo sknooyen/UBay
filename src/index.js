@@ -11,6 +11,7 @@ import Messages from './Front-end/Messages';
 import SignIn from './login/signin';
 import ListingPage from './Front-end/ListingPage';
 
+// render the app
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>

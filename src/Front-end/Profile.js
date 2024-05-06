@@ -3,7 +3,7 @@ import { Typography, Grid, Container, Paper, ThemeProvider, Button, Dialog, Dial
 import { pageTheme } from "./util";
 import ListingItem from './ListingItem';
 import NavBar from "./NavBar";
-import { useAuth } from '../login/loginconfig';
+import { useAuth, auth } from '../login/loginconfig';
 import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
@@ -13,8 +13,6 @@ const Profile = () => {
     const [products, setProducts] = useState([]);
     const [deleteListing, setDeleteListing] = useState(null);
 
-    // Mocked user email for testing
-    // const userEmail = 'bnnguyen@umass.edu';
     const userEmail = auth.currentUser ? auth.currentUser.email : '';
 
     useEffect(() => {
@@ -32,8 +30,8 @@ const Profile = () => {
         // TODO: add logic when listing is clicked
     };
 
+    // open edit listing page
     const handleEdit = (listing) => {
-        console.log('Edit clicked (profile):', listing);
         const extension = '/sell/' + listing.id;
         navigate(extension);
     };
@@ -42,10 +40,8 @@ const Profile = () => {
         setDeleteListing(listing);
     };
 
+    // delete the listing
     const handleConfirmDelete = () => {
-        console.log('Deletion confirmed (profile):', deleteListing);
-        // TODO: add logic to delete the listing
-        // setDeleteListing(null); // Close the dialog
         fetch(`http://localhost:8000/api/products/${deleteListing._id}`, {
             method: 'DELETE',
         })
@@ -58,8 +54,8 @@ const Profile = () => {
             }
         })
         .catch(error => {
-            console.error('Error deleting listing:', error);
             // Handle error
+            console.error('Error deleting listing:', error);
         })
         .finally(() => {
             setDeleteListing(null); // Close the dialog

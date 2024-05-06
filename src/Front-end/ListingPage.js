@@ -6,15 +6,10 @@ import { Report } from "@mui/icons-material";
 import axios from "axios";
 import NavBar from "./NavBar";
 import { useParams, useNavigate } from "react-router-dom";
-<<<<<<< HEAD
 import { useAuth } from "../login/loginconfig";
-=======
 import { auth } from "../login/loginconfig";
->>>>>>> fe318ccdd39eec483b583aab6f16bb489217434f
 
 const ListingPage = () => {
-  const currentUser = useAuth()
-  const navigate = useNavigate();
   const userEmail = auth.currentUser ? auth.currentUser.email : '';
   const { id } = useParams();
   const [listing, setListing] = useState();
@@ -22,9 +17,8 @@ const ListingPage = () => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [isReport, setIsReport] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
-  // console.log("listing page")
 
-  //Get the product with the id
+  // Get the product with the id
   useEffect(() => {
     axios.get(`http://localhost:8000/api/products?id=${id}`)
       .then((response) => {
@@ -52,14 +46,14 @@ const ListingPage = () => {
     setCurrentPhotoIndex((prevIndex) => (prevIndex + 1) % listing.imageURL.length);
   };
 
-  const handleMessageSeller = () => {
-    // TODO: add logic here
-  };
-
   const handlePreviousPhoto = () => {
     setCurrentPhotoIndex(
       (prevIndex) => (prevIndex - 1 + listing.imageURL.length) % listing.imageURL.length
     );
+  };
+
+  const handleMessageSeller = () => {
+    // TODO: add logic here
   };
 
   const handleCloseAlertMessage = () => {
@@ -91,17 +85,17 @@ const ListingPage = () => {
       report_count: updatedReport
     }
 
+    // update database
     axios.put(`http://localhost:8000/api/products/${listing._id}`, reportData)
-      .then(response => {
-        console.log("Reports updated on listing:", response.data);
+      .then(_response => {
         listing.report_count = updatedReport;
         setIsReport(!isReport)
 
         if (updatedReport.length >= 10) {
           axios.delete(`http://localhost:8000/api/products/${listing._id}`)
             .then(response => {
+              // Perform additional actions needed after deletion
               console.log("Listing deleted:", response.data);
-              // Perform any additional actions needed after deletion
             })
             .catch(error => {
               console.error("Error deleting listing:", error);
@@ -113,6 +107,7 @@ const ListingPage = () => {
       });
   }
 
+  // add item to watchlist
   const handleFavorite = () => {
     var updatedFavoriteId = ""
 
@@ -138,6 +133,7 @@ const ListingPage = () => {
       favorite_id: updatedFavoriteId
     }
 
+    // update database
     axios.put(`http://localhost:8000/api/products/${listing._id}`, favoriteData)
       .then(response => {
         console.log("Favorites updated on listing:", response.data);
@@ -191,7 +187,7 @@ const ListingPage = () => {
                             <>
                             <img
                                 src={listing.imageURL[currentPhotoIndex]}
-                                alt={`Photo ${currentPhotoIndex + 1}`}
+                                alt={`${currentPhotoIndex + 1}`}
                                 style={{ maxWidth: "100%", maxHeight: "400px", margin: "10px 0" }}
                             />
                             {listing.imageURL.length > 1 && (
