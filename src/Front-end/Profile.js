@@ -3,10 +3,11 @@ import { Typography, Grid, Container, Paper, ThemeProvider, Button, Dialog, Dial
 import { pageTheme } from "./util";
 import ListingItem from './ListingItem';
 import NavBar from "./NavBar";
-import { auth } from "../login/loginconfig";
+import { useAuth, auth } from '../login/loginconfig';
 import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
+    const currentUser = useAuth()
     const navigate = useNavigate();
     
     const [products, setProducts] = useState([]);
@@ -66,7 +67,7 @@ const Profile = () => {
     };
 
     return (
-        <ThemeProvider theme={pageTheme}>
+        currentUser && <ThemeProvider theme={pageTheme}>
             <NavBar />
             <div>
                 <Container>

@@ -2,24 +2,42 @@ h1 {
     text-align: center;
 }
 
+.login {
+    display: flex;
+    background-size: cover;
+    background-position: 0px -50px;
+    background-image: url("/public/ZOOM-CampusBackgrounds_Old_Chapel.jpg");
+    margin-top: 110px;
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    align-items: center;
+    justify-content: center;
+    
+}
+
 .login-container {
-    margin-top: 50px;
+    margin-bottom: 100px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
 
-button {
+.logB {
     background-color: #a01c35; 
     color: #ffffff; 
-    padding: 20px 32px; 
-    font-size: 20px; 
+    padding: 30px 30px; 
+    font-size: 30px; 
     border: none;
     border-radius: 12px; 
     cursor: pointer;
+    transition: padding 0.2s 
 }
 
-button:hover {
+
+
+.logB:hover {
     background-color: #890e24; 
+    padding: 35px 35px; 
   }

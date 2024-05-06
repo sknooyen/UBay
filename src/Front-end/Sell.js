@@ -4,9 +4,10 @@ import { useParams, useNavigate } from "react-router-dom";
 import { TextField, Button, Snackbar, Paper, Container, MenuItem, Grid, ThemeProvider, Typography } from "@mui/material";
 import { CATEGORIES, CONDITIONS, pageTheme } from "./util";
 import axios from 'axios';
-import { auth } from "../login/loginconfig";
+import { useAuth, auth } from "../login/loginconfig";
 
 const Sell = () => {
+  const currentUser = useAuth()
   const { id } = useParams();
   const navigate = useNavigate();
   
@@ -233,6 +234,7 @@ const Sell = () => {
   }, [listing, userEmail, navigate]);
 
   return (
+    currentUser &&
     <ThemeProvider theme={pageTheme}>
       <NavBar />
       <div>
