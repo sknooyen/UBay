@@ -2,6 +2,12 @@ import { render, screen } from '@testing-library/react';
 import NavBar from './NavBar';
 import { BrowserRouter } from 'react-router-dom';
 
+jest.mock('../login/loginconfig', () => ({
+    logOut: jest.fn(() => {
+        return {}
+    }),
+}));
+
 test('renders Home button', () => {
   render(<BrowserRouter><NavBar /></BrowserRouter>);
   const element = screen.getByRole('button', { name: 'Home' });
