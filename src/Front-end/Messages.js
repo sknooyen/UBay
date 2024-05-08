@@ -7,64 +7,14 @@ import { Typography, Box, TextareaAutosize ,Container, Grid, Paper, TextField, T
 import axios from 'axios';
 import { auth } from "../login/loginconfig";
 
-
-// }
-// const handleNewChat = () =>{
-//     axios.newChat('http://localhost:8000/api/messages',data).then(res => {
-//         // clear the form fields
-//         // notify user that their listing was posted
-//       }).catch(error => {
-//         console.error('Error posting data:', error);
-// })}
-
-//sample messages only sent by the current user
-
-//param to pass in through axios, need component to operate with verified email address
-export const USERNAME = "bruh1"
-
-export const USERLIST = ["Buyer1", "Seller1", "Buyer2", "Selling2"]
-
-const messages = [
-    { text: "Hi there!", isSender: false },
-    { text: "Hello! How are you?", isSender: true },
-    { text: "I'm good, thanks for asking. What about you?", isSender: false },
-    { text: "I'm good, thanks for asking. What about you?", isSender: false },
-    { text: "I'm good, thanks for asking. What about you?", isSender: false },
-    { text: "I'm good, thanks for asking. What about you?", isSender: false },
-    { text: "I'm good, thanks for asking. What about you?", isSender: false },
-    { text: "I'm good, thanks for asking. What about you?", isSender: false },
-    { text: "I'm good, thanks for asking. What about you?", isSender: false },
-    { text: "I'm good, thanks for asking. What about you?", isSender: false },
-    { text: "I'm good, thanks for asking. What about you?", isSender: false },
-    { text: "I'm good, thanks for asking. What about you?", isSender: false },
-    { text: "I'm good, thanks for asking. What about you?", isSender: false },
-    { text: "I'm good, thanks for asking. What about you?", isSender: false },
-    { text: "I'm good, thanks for asking. What about you?", isSender: false },
-    { text: "I'm good, thanks for asking. What about you?", isSender: false },
-    { text: "I'm good, thanks for asking. What about you?", isSender: false },
-    { text: "I'm good, thanks for asking. What about you?", isSender: false },
-    { text: "I'm good, thanks for asking. What about you?", isSender: false },
-    { text: "I'm good, thanks for asking. What about you?", isSender: false },
-    { text: "I'm good, thanks for asking. What about you?", isSender: false },
-    { text: "I'm good, thanks for asking. What about you?", isSender: false },
-    { text: "I'm good, thanks for asking. What about you?", isSender: false },
-    { text: "I'm good, thanks for asking. What about you?", isSender: false },
-    { text: "I'm good, thanks for asking. What about you?", isSender: false },
-    { text: "I'm good, thanks for asking. What about you?", isSender: false },
-
-
-];
-
-
-
 const Messages = () => {
     // State to store the user input
-    const userEmail = auth.currentUser ? auth.currentUser.email : '';
+    const USERNAME = auth.currentUser ? auth.currentUser.email : '';
     const [allConvos, setAllConvos] = useState('')
     const [inputValue, setInputValue] = useState('');
-    const [convo, setConvo] = useState(USERLIST[0])
-    const [allMessages, setAllMessages] = useState(messages)
-    const [friends, setFriends] = useState(USERLIST)
+    const [convo, setConvo] = useState('')//originally was USERLIST[0]
+    const [allMessages, setAllMessages] = useState([])
+    const [friends, setFriends] = useState([])//originally was USERLIST
     const messagesEndRef = useRef(null);
     const [screenHeight, setScreenHeight] = useState(window.innerHeight)
 
@@ -72,11 +22,6 @@ const Messages = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
       }, [allMessages]);
 
-    // const handleMessageInput = (message) => {
-    //     setAllMessages([...allMessages, message])
-    //     //TODO: Set allMessages to what the database returns
-    // }
-    // Function to handle changes in the text field
     const handleInputChange = (event) => {
         setInputValue(event.target.value);
     };
@@ -90,15 +35,6 @@ const Messages = () => {
         });
     }, [friends]);
 
-    //Get the messages list to update and dispaly the new message that was recieved when the other person sends you that message
-    // useEffect(() => {
-    //     let url = `http://localhost:8000/api/messages/conversation/${USERNAME}&${convo}`;
-    //     axios.get(url).then((response) =>{
-    //         setAllMessages(response.data)
-    //     }).catch((error) => {
-    //         setAllMessages(["None"]);
-    //     });
-    // }, [allMessages])
 
     const handleConvoChange = async (name) => {
         setConvo(name)

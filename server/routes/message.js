@@ -1,6 +1,4 @@
 const Message = require("../models/Message")
-const { route } = require("./auth");
-const {verifyToken, verifyTokenAndAuthorization, verifyTokenAndAdmin } = require("./verifyToken")
 
 const router = require("express").Router();
 
