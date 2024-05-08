@@ -36,7 +36,7 @@ Open a second terminal
 
 # Test instructions
 
-`npm run`
+`npm run test`
 
 # Build instructions
 
