@@ -1,3 +1,4 @@
+
 ## Back-end Files Overview
 - **.env**: Stores project configuration settings. The mongoDB connection string and port number are stored in this file
 
@@ -12,3 +13,4 @@
 - **Product.js** : Defines the schema for how products are stored in the database. Every field and its associated type is declared and then the product schema is exported so it can be used in product.js
 
 - **product.js**: Implements post, put, delete, and get functions for products. Calling these functions interact with the products table in the database.
+

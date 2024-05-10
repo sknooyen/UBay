@@ -5,12 +5,15 @@ import { Favorite } from "@mui/icons-material";
 import { Report } from "@mui/icons-material";
 import axios from "axios";
 import NavBar from "./NavBar";
+
+
 import { useParams} from "react-router-dom";
 import { useAuth, auth } from "../login/loginconfig";
 
 
 const ListingPage = () => {
   const currentUser = useAuth();
+
   const userEmail = auth.currentUser ? auth.currentUser.email : '';
   const { id } = useParams();
   const [listing, setListing] = useState();
@@ -53,8 +56,17 @@ const ListingPage = () => {
     );
   };
 
-  const handleMessageSeller = () => {
+  const handleMessageSeller = async (name) => {
     // TODO: add logic here
+    const url = `http://localhost:8000/api/messages/postmessage/${userEmail}&${name}`
+    const data = {
+        user1: userEmail,
+        user2: name
+        // message_objects: [{text: "Hi", sender: userEmail}]
+    }
+    axios.post(url, data).then(res => console.log("sent")).catch(error=>console.log(error))    
+    navigate(`/messages`)
+
   };
 
   const handleCloseAlertMessage = () => {
@@ -223,7 +235,7 @@ const ListingPage = () => {
                         variant="contained"
                         color="primary"
                         fullWidth
-                        onClick={handleMessageSeller}
+                        onClick={() => {handleMessageSeller(listing.id_email)}}
                         style={{ marginTop: "10px" }}
                         >
                         Message Seller
