@@ -6,14 +6,13 @@ import { Report } from "@mui/icons-material";
 import axios from "axios";
 import NavBar from "./NavBar";
 
-
-import { useParams} from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAuth, auth } from "../login/loginconfig";
 
 
 const ListingPage = () => {
   const currentUser = useAuth();
-
+  const navigate = useNavigate()
   const userEmail = auth.currentUser ? auth.currentUser.email : '';
   const { id } = useParams();
   const [listing, setListing] = useState();
