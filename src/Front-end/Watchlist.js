@@ -1,8 +1,10 @@
 import ListingsLayout from "./ListingsLayout";
+import { useAuth, auth } from "../login/loginconfig";
 import { useState, useEffect } from 'react';
-import { auth } from "../login/loginconfig";
+
 
 const Watchlist = () => {
+    const currentUser = useAuth()
 
     const [products, setProducts] = useState([]);
     const userEmail = auth.currentUser ? auth.currentUser.email : '';
@@ -18,6 +20,7 @@ const Watchlist = () => {
     }, [userEmail]);
 
     return (
+        currentUser &&
         // render the listings page using the favorited listings data
         <ListingsLayout title="Watchlist" listings={products}/>
       );

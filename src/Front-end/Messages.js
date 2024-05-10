@@ -2,6 +2,9 @@ import "./Messages.css"
 import React, { useState, useRef, useEffect } from "react";
 import ReactDOM from 'react-dom'
 import NavBar from "./NavBar";
+
+import { useAuth } from "../login/loginconfig";
+
 import { pageTheme } from "./util";
 import { Typography, Box, TextareaAutosize ,Container, Grid, Paper, TextField, ThemeProvider, List, ListItem, Checkbox, ListItemText, Slider, Input, MenuItem, Select, Stack, Button } from '@mui/material';
 import axios from 'axios';

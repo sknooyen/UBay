@@ -14,7 +14,7 @@ const ListingsLayout = (props) => {
   const [checkedCategories, setCheckedCategories] = useState(CATEGORIES);
   const [checkedConditions, setCheckedConditions] = useState(CONDITIONS);
   const [priceRange, setPriceRange] = useState([0, MAXPRICE]);
-  const [sortBy, setSortBy] = useState('Best Match');
+  const [sortBy, setSortBy] = useState('Post Date: New to Old');
   const [search, setSearch] = useState('');
   const [filteredListings, setFilteredListings] = useState([])
 
@@ -29,13 +29,12 @@ const ListingsLayout = (props) => {
         listings.sort((a, b) => b.price - a.price);
         break;
       case 'Post Date: New to Old':
-        listings.sort((a, b) => new Date(b.postDate) - new Date(a.postDate));
+        listings.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         break;
       case 'Post Date: Old to New':
-        listings.sort((a, b) => new Date(a.postDate) - new Date(b.postDate));
+        listings.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
         break;
       default:
-        // TODO: implement best match (right now it just displays everything in the arrays original order)
         break;
     }
     // apply selected filters and search

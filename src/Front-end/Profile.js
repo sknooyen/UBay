@@ -3,10 +3,11 @@ import { Typography, Grid, Container, Paper, ThemeProvider, Button, Dialog, Dial
 import { pageTheme } from "./util";
 import ListingItem from './ListingItem';
 import NavBar from "./NavBar";
-import { auth } from "../login/loginconfig";
+import { useAuth, auth } from '../login/loginconfig';
 import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
+    const currentUser = useAuth()
     const navigate = useNavigate();
     
     const [products, setProducts] = useState([]);
@@ -23,11 +24,6 @@ const Profile = () => {
             })
             .catch(error => console.error('Error fetching products:', error));
     }, [userEmail]);
-
-    const handleListingClick = (listing) => {
-        console.log('Listing clicked (profile):', listing);
-        // TODO: add logic when listing is clicked
-    };
 
     // open edit listing page
     const handleEdit = (listing) => {
@@ -66,7 +62,7 @@ const Profile = () => {
     };
 
     return (
-        <ThemeProvider theme={pageTheme}>
+        currentUser && <ThemeProvider theme={pageTheme}>
             <NavBar />
             <div>
                 <Container>
@@ -77,7 +73,7 @@ const Profile = () => {
                                 {products.map((listing) => (
                                     <Grid container key={listing.id} alignItems="center" spacing={2}>
                                         <Grid item xs={10}>
-                                            <ListingItem listing={listing} handleListingClick={handleListingClick} />
+                                            <ListingItem listing={listing} handleListingClick={handleEdit} />
                                         </Grid>
                                         <Grid item xs={2} container justifyContent="flex-end" spacing={1}>
                                             <Grid item>

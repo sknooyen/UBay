@@ -1,6 +1,7 @@
 ## Front-end Files Overview
 
 ### JavaScript Files
+- **index.js**: Renders the app.
 - **HomePage.js**: Displays all listings. Users can search, filter, and sort. Clicking on a listing on this home page will lead users to ListingPage.js.
 - **ListingItem.js**: Contains boilerplate for small listing item view on ListingsLayout.js.
 - **ListingPage.js**: Displays buyer view of listing information (title, price, photos, description, category, and condition).
