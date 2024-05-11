@@ -28,12 +28,4 @@ const NavBar = () => {
     )
 }
 
-
-
-function SignOut(){
-    
-    
-
-}
-
 export default NavBar

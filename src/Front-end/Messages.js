@@ -1,25 +1,20 @@
 import "./Messages.css"
 import React, { useState, useRef, useEffect } from "react";
-import ReactDOM from 'react-dom'
 import NavBar from "./NavBar";
-
-import { useAuth } from "../login/loginconfig";
-
 import { pageTheme } from "./util";
-import { Typography, Box, TextareaAutosize ,Container, Grid, Paper, TextField, ThemeProvider, List, ListItem, Checkbox, ListItemText, Slider, Input, MenuItem, Select, Stack, Button } from '@mui/material';
+import { Typography, Box ,Container, Grid, Paper, TextField, ThemeProvider, List, ListItem, Stack, Button } from '@mui/material';
 import axios from 'axios';
 import { auth } from "../login/loginconfig";
 
 const Messages = () => {
     // State to store the user input
     const USERNAME = auth.currentUser ? auth.currentUser.email : '';
-    const [allConvos, setAllConvos] = useState('')
     const [inputValue, setInputValue] = useState('');
-    const [convo, setConvo] = useState('')//originally was USERLIST[0]
+    const [convo, setConvo] = useState('')
     const [allMessages, setAllMessages] = useState([])
-    const [friends, setFriends] = useState([])//originally was USERLIST
+    const [friends, setFriends] = useState([])
     const messagesEndRef = useRef(null);
-    const [screenHeight, setScreenHeight] = useState(window.innerHeight)
+    const [screenHeight, setScreenHeight] = useState(window.innerHeight);
 
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -32,25 +27,25 @@ const Messages = () => {
     useEffect(() => {
         let url = `http://localhost:8000/api/messages/getconversations/${USERNAME}`;
         axios.get(url).then((response) =>{
-            setFriends(response.data)
-        }).catch((error) => {
+            setFriends(response.data);
+        }).catch((_error) => {
             setFriends(["None"]);
         });
-    }, [friends]);
+    }, [friends, USERNAME]);
 
-
+    // Change the messages associated with conversation
     const handleConvoChange = async (name) => {
         setConvo(name)
         // Construct the URL with the provided emails
         const url = `http://localhost:8000/api/messages/conversation/${USERNAME}&${name}`;
         axios.get(url).then((response) =>{
             setAllMessages(response.data)
-        }).catch((error) => {
-            setAllMessages([{text: "they this not working", sender: USERNAME}]);
+        }).catch((_error) => {
+            setAllMessages([{text: "This not working", sender: USERNAME}]);
         });
 
-            //TODO: Change the messages associated with conversation
     }
+
     const handleSend = (message) => {
         if (inputValue.trim() !== '') {
             const url = `http://localhost:8000/api/messages/postmessage/${USERNAME}&${convo}`
@@ -59,11 +54,10 @@ const Messages = () => {
                 user2: convo,
                 message_objects: [...allMessages, message]
             }
-            axios.post(url, data).then(res => console.log("sent")).catch(error=>console.log(error))    
+            axios.post(url, data).then(_res => console.log("sent")).catch(error=>console.log(error))    
             
-                // Add new message to the messages array
+            // Add new message to the messages array
             setAllMessages([...allMessages, message]);
-            //TODO: Send message to the database
             
             // Clear the input field after sending a message
             setInputValue('');
@@ -83,8 +77,6 @@ const Messages = () => {
                                 margin: 'auto'
                             }}>
                                 <Typography align="center" variant="h6">Conversations</Typography>
-                                <TextField sx={{ m: 2, width: '25ch' }} id="filled-basic" label="Search" variant="filled" />
-    
                                 <Stack align="center" direction={"column"} spacing={2}>
                                     {friends.map(option =>
                                         <ListItem align="center" key={option}>
@@ -109,7 +101,7 @@ const Messages = () => {
                                     {allMessages.map((message, index) => (
                                         <ListItem key={index} sx={{
                                             display: 'flex',
-                                            justifyContent: message.sender == USERNAME ? 'flex-end' : 'flex-start',
+                                            justifyContent: message.sender === USERNAME ? 'flex-end' : 'flex-start',
                                             padding: '10px'
                                         }}>
                                             <Typography variant="body1">{message.message}</Typography>
@@ -142,5 +134,4 @@ const Messages = () => {
     )
 }
 
-
- export default Messages
+export default Messages
