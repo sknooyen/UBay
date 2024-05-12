@@ -12,6 +12,8 @@
 - **Sell.js**: Displays template for creating a listing. The code for the pages /sell/{id} for different listing IDs is also contained in this file. These pages are where users can edit their previously posted listings.
 - **Watchlist.js**: Displays all listings that users marked with the heart button.
 - **util.js**: Contains CATEGORIES, CONDITIONS, SORTING, and MAXPRICE exports used across the site as well as pageTheme, a Material UI custom theme.
+- **signin.js**: Handles login functionality and represents base login UI component.
+- **loginconfig.js**: Firebase initialization and authentication check.
 
 ### Test Files
 - **ListingItem.test.js**
