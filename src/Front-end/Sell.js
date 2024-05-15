@@ -136,7 +136,7 @@ const Sell = () => {
   };
 
   const handleCancel = () => {
-    navigate('/')
+    navigate('/home')
   };
 
   const handleDelete = () => {
@@ -152,7 +152,7 @@ const Sell = () => {
           setPhotos([]);
           setCurrentPhotoIndex(0);
           setAlertMessage("✅ Listing deleted successfully.");
-          navigate('/');
+          navigate('/home');
         })
         .catch((error) => {
           console.error("Error deleting listing:", error);
@@ -178,7 +178,7 @@ const Sell = () => {
       axios.put(`http://localhost:8000/api/products/${listing._id}`, data)
         .then(() => {
           setAlertMessage("✅ Listing updated successfully.");
-          navigate('/')
+          navigate('/home')
         })
         .catch((error) => {
           console.error("Error updating listing:", error);
@@ -225,7 +225,7 @@ const Sell = () => {
   // if not authorized owner of this listing, go back to home page, otherwise, set to edit mode
   useEffect(() => {
     if (listing && !(listing.id_email === userEmail)) {
-      navigate('/');
+      navigate('/home');
     } else {
       if (listing) {
         setEditMode(true)
